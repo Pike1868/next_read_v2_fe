@@ -17,13 +17,13 @@ export default function Header() {
                 <nav>
                     <ul className="flex space-x-4">
                         <li>
-                            <a href="/about" className="text-gray-700">
-                                About
+                            <a href="/featured" className="text-gray-700">
+                                Featured
                             </a>
                         </li>
                         <li>
-                            <a href="/featured" className="text-gray-700">
-                                Featured
+                            <a href="/about" className="text-gray-700">
+                                About
                             </a>
                         </li>
                         <li>
