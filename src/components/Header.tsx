@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 export default function Header() {
     return (
-        <header className="bg-white shadow-md">
+        <header className="bg-[#212529] h-16 shadow-md">
             <div className="container flex items-center justify-between px-4 py-2 mx-auto">
                 <div className="flex items-center">
                     <img
@@ -10,36 +11,40 @@ export default function Header() {
                         alt="NextRead Logo"
                         className="h-8 mr-2"
                     />
-                    <Link to="/" className="text-2xl font-bold">
+                    <Link to="/" className="text-2xl font-bold text-white">
                         NextRead
                     </Link>
                 </div>
                 <nav>
                     <ul className="flex space-x-4">
                         <li>
-                            <a href="/featured" className="text-gray-700">
+                            <Link to="/featured" className="text-white">
                                 Featured
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="/about" className="text-gray-700">
+                            <Link to="/about" className="text-white">
                                 About
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="/contact" className="text-gray-700">
+                            <Link to="/contact" className="text-white">
                                 Contact
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </nav>
-                <div>
-                    <a href="/signup" className="mr-4 text-blue-600">
-                        Sign Up
-                    </a>
-                    <a href="/signin" className="text-blue-600">
-                        Sign In
-                    </a>
+                <div className="flex space-x-4">
+                    <Link to="/signup">
+                        <Button variant="outline" className="text-green-800">
+                            Sign Up
+                        </Button>
+                    </Link>
+                    <Link to="/signin">
+                        <Button className="text-white bg-green-800">
+                            Sign In
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </header>

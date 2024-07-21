@@ -34,7 +34,7 @@ export default function TestimonialSection() {
     return (
         <section className="w-full px-6 py-16">
             <h2 className="mb-8 text-4xl font-bold text-center">
-                What Our Users Say
+                What Our Users Are Saying...
             </h2>
             <div className="px-3 mx-auto lg:max-w-6xl">
                 <Carousel>
