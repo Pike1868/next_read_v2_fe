@@ -6,21 +6,21 @@ import { Card, CardContent } from "./ui/card";
 export default function FeaturesSection() {
     const features = [
         {
-            icon: <ImBooks size={32} className="text-[#416788]" />,
+            icon: <ImBooks size={32} className="text-yellow-600" />,
             title: "Discover New Books",
             description:
                 "Explore a vast library of books across various genres and authors.",
             imgSrc: "/discovernewbooks.jpg",
         },
         {
-            icon: <FaBookReader size={32} className="text-[#416788]" />,
+            icon: <FaBookReader size={32} className="text-yellow-600" />,
             title: "Track Your Progress",
             description:
                 "Keep track of the books you're currently reading and those you've completed.",
             imgSrc: "/trackyourprogress.jpg",
         },
         {
-            icon: <BsBookmarkStarFill size={32} className="text-[#416788]" />,
+            icon: <BsBookmarkStarFill size={32} className="text-yellow-600" />,
             title: "Save Favorites",
             description:
                 "Create a personalized library of your favorite books.",
@@ -42,14 +42,14 @@ export default function FeaturesSection() {
                             alt={feature.title}
                             className="object-cover w-full h-48 rounded-t-lg"
                         />
-                        <CardContent className="h-full p-4 text-center bg-white ">
+                        <CardContent className="h-full p-4 text-center bg-[#14532D] ">
                             <div className="flex justify-center mb-4">
                                 {feature.icon}
-                                <h3 className="ml-4 text-xl font-semibold text-[#416788]">
+                                <h3 className="ml-4 text-xl font-semibold text-white">
                                     {feature.title}
                                 </h3>
                             </div>
-                            <p className="text-gray-700">
+                            <p className="text-white">
                                 {feature.description}
                             </p>
                         </CardContent>
