@@ -1,4 +1,3 @@
-import { Book } from "@/types/books";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import ServerApi from "../api/ServerAPI";
@@ -7,12 +6,10 @@ import { Input } from "./ui/input";
 
 export default function Searchbar() {
     const [query, setQuery] = useState("");
-    const [bookResults, setBookResults] = useState<Book[]>([]);
     const handleSearch = async () => {
         console.log("handleSearch called with query:", query);
         try {
             const results = await ServerApi.searchBooks(query);
-            setBookResults(results.books);
             console.log("Search Results: ", results.books);
         } catch (error) {
             console.error("Error searching books, ", error);
