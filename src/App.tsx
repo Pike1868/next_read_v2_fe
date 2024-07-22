@@ -5,6 +5,7 @@ import Contact from "./pages/Contact";
 import ErrorPage from "./pages/Error";
 import Featured from "./pages/Featured";
 import HomePage from "./pages/Home";
+import Search from "./pages/Search";
 
 const router = createBrowserRouter([
     {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
             { path: "about", element: <About /> },
             { path: "featured", element: <Featured /> },
             { path: "contact", element: <Contact /> },
+            { path: "search", element: <Search /> },
         ],
     },
 ]);
