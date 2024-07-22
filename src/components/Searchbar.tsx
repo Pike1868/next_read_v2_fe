@@ -1,16 +1,21 @@
+import { setSearchResults } from "@/features/search/searchSlice";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import ServerApi from "../api/ServerAPI";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 export default function Searchbar() {
     const [query, setQuery] = useState("");
+    const dispatch = useDispatch();
+
     const handleSearch = async () => {
         console.log("handleSearch called with query:", query);
         try {
             const results = await ServerApi.searchBooks(query);
             console.log("Search Results: ", results.books);
+            dispatch(setSearchResults(results.books));
         } catch (error) {
             console.error("Error searching books, ", error);
         }
