@@ -63,9 +63,3 @@
         @apply bg-background text-foreground;
     }
 }
-
-input:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}

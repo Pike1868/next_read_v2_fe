@@ -16,8 +16,18 @@ export default function Searchbar() {
         console.log("handleSearch called with query:", query);
         try {
             const results = await ServerApi.searchBooks(query);
-            console.log("Search Results: ", results.books);
-            dispatch(setSearchResults(results.books));
+
+            // Filter out duplicates based on google_books_id
+            const uniqueBooks = results.books.filter(
+                (book, index, self) =>
+                    index ===
+                    self.findIndex(
+                        (b) => b.google_books_id === book.google_books_id
+                    )
+            );
+            console.log("Search Results: ", uniqueBooks);
+            dispatch(setSearchResults(uniqueBooks));
+
             //Once the results are set in the store, we can direct the user to the search page
             navigate("/search");
         } catch (error) {
@@ -32,10 +42,10 @@ export default function Searchbar() {
         }
     };
     return (
-        <div className="flex justify-center w-full py-4 ">
+        <div className="flex py-4">
             <div className="flex max-h-20">
                 <Input
-                    className="p-2 px-4 py-2 text-black rounded-l-full"
+                    className="p-2 px-4 py-2 text-black rounded-l-full "
                     placeholder="Search for books here..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}

@@ -15,7 +15,9 @@ export default function HeroSection() {
                     reader or just starting your reading journey, we've got you
                     covered.
                 </p>
+                <div className="flex justify-center">
                 <Searchbar />
+                </div>
             </div>
         </section>
     );
