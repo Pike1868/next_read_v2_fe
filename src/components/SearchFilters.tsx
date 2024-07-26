@@ -1,14 +1,16 @@
 import { setSorting } from "@/features/search/searchSlice";
+import { RootState } from "@/store/rootReducer";
 import { BookFilterOptions } from "@/types/books";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormSelect from "./FormSelect";
 import Searchbar from "./Searchbar";
 
 export default function SearchFilters() {
+    const sorting = useSelector((state: RootState) => state.search.sorting);
     const dispatch = useDispatch();
 
-    const handleSortChange = (order: BookFilterOptions) => {
-        dispatch(setSorting(order));
+    const handleSortChange = (value: BookFilterOptions) => {
+        dispatch(setSorting(value));
     };
 
     return (
@@ -21,6 +23,7 @@ export default function SearchFilters() {
                     <FormSelect
                         label="Sort"
                         name="sort"
+                        value={sorting}
                         options={[
                             "none",
                             "a-z",
@@ -30,7 +33,6 @@ export default function SearchFilters() {
                             "page length",
                             "categories",
                         ]}
-                        defaultValue={"none"}
                         onChange={handleSortChange}
                     />
                 </div>
