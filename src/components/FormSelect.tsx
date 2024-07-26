@@ -11,7 +11,7 @@ import { BookFilterOptions } from "@/types/books";
 type SelectInputProps = {
     name: string;
     label?: string;
-    defaultValue?: BookFilterOptions;
+    value: BookFilterOptions;
     options: BookFilterOptions[];
     onChange: (value: BookFilterOptions) => void;
 };
@@ -20,7 +20,7 @@ export default function FormSelect({
     label,
     name,
     options,
-    defaultValue,
+    value,
     onChange,
 }: SelectInputProps) {
     return (
@@ -29,7 +29,7 @@ export default function FormSelect({
                 {label || name}
             </Label>
             <Select
-                defaultValue={defaultValue || options[0]}
+                value={value}
                 name={name}
                 onValueChange={(value) => onChange(value as BookFilterOptions)}
             >
