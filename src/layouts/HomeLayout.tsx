@@ -1,6 +1,6 @@
+import Footer from "@/components/sections/Footer";
+import Header from "@/components/sections/Header";
 import { Outlet, useNavigation } from "react-router-dom";
-import Footer from "../components/sections/Footer";
-import Header from "../components/Header";
 
 const HomeLayout = () => {
     const navigation = useNavigation();
@@ -9,7 +9,7 @@ const HomeLayout = () => {
     return (
         <>
             <Header />
-           
+
             <div className="container px-4 mx-auto">
                 {isPageLoading ? <p>Loading...</p> : <Outlet />}
             </div>
