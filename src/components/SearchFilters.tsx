@@ -1,11 +1,16 @@
+import { setSorting } from "@/features/search/searchSlice";
+import { BookFilterOptions } from "@/types/books";
+import { useDispatch } from "react-redux";
 import FormSelect from "./FormSelect";
 import Searchbar from "./Searchbar";
 
-interface SearchFiltersProps {
-    sortBooks: (order: string) => void;
-}
+export default function SearchFilters() {
+    const dispatch = useDispatch();
 
-export default function SearchFilters({ sortBooks }: SearchFiltersProps) {
+    const handleSortChange = (order: BookFilterOptions) => {
+        dispatch(setSorting(order));
+    };
+
     return (
         <div className="flex flex-wrap items-center justify-center w-full p-4 mt-4 space-x-10 bg-[#14532D] border-2 border-[#212529] rounded-md border-opacity-20">
             <div className="w-full md:w-auto">
@@ -16,9 +21,17 @@ export default function SearchFilters({ sortBooks }: SearchFiltersProps) {
                     <FormSelect
                         label="Sort"
                         name="sort"
-                        options={["none", "a-z", "z-a"]}
+                        options={[
+                            "none",
+                            "a-z",
+                            "z-a",
+                            "author",
+                            "year",
+                            "page length",
+                            "categories",
+                        ]}
                         defaultValue={"none"}
-                        onChange={sortBooks}
+                        onChange={handleSortChange}
                     />
                 </div>
             </div>

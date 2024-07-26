@@ -6,13 +6,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { BookFilterOptions } from "@/types/books";
 
 type SelectInputProps = {
     name: string;
     label?: string;
-    defaultValue?: string;
-    options: string[];
-    onChange: (value: string) => void;
+    defaultValue?: BookFilterOptions;
+    options: BookFilterOptions[];
+    onChange: (value: BookFilterOptions) => void;
 };
 
 export default function FormSelect({
@@ -30,7 +31,7 @@ export default function FormSelect({
             <Select
                 defaultValue={defaultValue || options[0]}
                 name={name}
-                onValueChange={onChange}
+                onValueChange={(value) => onChange(value as BookFilterOptions)}
             >
                 <SelectTrigger id={name}>
                     <SelectValue />

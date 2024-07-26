@@ -27,6 +27,9 @@ export default function BooksList({ books }: BooksListProps) {
                                 {book.title}
                             </h2>
                             <h4>{book.authors.join(", ")}</h4>
+                            <p>Published Date: {new Date(book.published_date).getFullYear()}</p>
+                            <p>Page Count: {book.page_count}</p>
+                            <p>Categories: {book.categories.join(", ")}</p>
                         </div>
                     </CardContent>
                 </Card>
