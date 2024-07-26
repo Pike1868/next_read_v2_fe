@@ -1,7 +1,7 @@
 import { BsBookmarkStarFill } from "react-icons/bs";
 import { FaBookReader } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function FeaturesSection() {
     const features = [

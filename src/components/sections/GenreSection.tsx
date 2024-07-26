@@ -7,7 +7,7 @@ import {
 } from "@/features/search/searchSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function GenresSection() {
     const TOP_GENRES = [

@@ -1,9 +1,9 @@
-import CallToActionSection from "@/components/CallToActionSection";
-import FeaturesSection from "@/components/FeaturesSection";
-import GenresSection from "@/components/GenreSection";
-import HeroSection from "@/components/HeroSection";
-import PromoImage from "@/components/PromoImage";
-import TestimonialSection from "@/components/TestimonialsSection";
+import CallToActionSection from "@/components/sections/CallToActionSection";
+import FeaturesSection from "@/components/sections/FeaturesSection";
+import GenresSection from "@/components/sections/GenreSection";
+import HeroSection from "@/components/sections/HeroSection";
+import PromoImage from "@/components/sections/PromoImage";
+import TestimonialSection from "@/components/sections/TestimonialsSection";
 
 const HomePage = () => {
     return (

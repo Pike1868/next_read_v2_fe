@@ -1,6 +1,6 @@
-import BooksContainer from "@/components/BooksContainer";
-import Pagination from "@/components/Pagination";
-import SearchFilters from "@/components/SearchFilters";
+import BooksContainer from "@/components/books/BooksContainer";
+import Pagination from "@/components/books/Pagination";
+import SearchFilters from "@/components/books/SearchFilters";
 import {
     setQuery,
     setSearchResults,

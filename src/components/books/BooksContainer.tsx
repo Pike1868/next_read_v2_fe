@@ -1,10 +1,10 @@
-import BooksGrid from "@/components/BooksGrid";
-import BooksList from "@/components/BooksList";
+import BooksGrid from "@/components/books/BooksGrid";
+import BooksList from "@/components/books/BooksList";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Book } from "@/types/books";
 import { useState } from "react";
 import { FaTh as FaGrid, FaList } from "react-icons/fa";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 
 interface BooksContainerProps {
     books: Book[];

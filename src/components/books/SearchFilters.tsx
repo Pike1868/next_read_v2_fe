@@ -1,9 +1,9 @@
+import FormSelect from "@/components/books/FormSelect";
+import Searchbar from "@/components/books/Searchbar";
 import { setSorting } from "@/features/search/searchSlice";
 import { RootState } from "@/store/rootReducer";
 import { BookFilterOptions } from "@/types/books";
 import { useDispatch, useSelector } from "react-redux";
-import FormSelect from "./FormSelect";
-import Searchbar from "./Searchbar";
 
 export default function SearchFilters() {
     const sorting = useSelector((state: RootState) => state.search.sorting);

@@ -1,4 +1,4 @@
-import Searchbar from "./Searchbar";
+import Searchbar from "@/components/books/Searchbar";
 
 export default function HeroSection() {
     return (

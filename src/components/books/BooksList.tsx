@@ -1,5 +1,5 @@
 import { Book } from "@/types/books";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface BooksListProps {
     books: Book[];

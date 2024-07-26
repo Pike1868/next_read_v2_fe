@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 export default function CallToActionSection() {
     return (
         <section className="w-full px-6 py-16 bg-green-900">

@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
     setQuery,
     setSearchResults,
@@ -8,9 +10,7 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import ServerApi from "../api/ServerAPI";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import ServerApi from "@/api/ServerAPI";
 
 export default function Searchbar() {
     const [query, setQueryLocal] = useState("");
@@ -20,7 +20,7 @@ export default function Searchbar() {
     // Function to handle the search action
     const handleSearch = async () => {
         console.log("handleSearch called with query:", query);
-        
+
         // Update Redux store with new search query, reset start index, and set default sorting
         dispatch(setQuery(query));
         dispatch(setStartIndex(0));
@@ -30,10 +30,10 @@ export default function Searchbar() {
             // Fetch search results from the API
             const results = await ServerApi.searchBooks(query, 0);
             console.log("Search Results: ", results.books);
-            
+
             // Update Redux store with search results
             dispatch(setSearchResults(results.books));
-            
+
             // Navigate to the search results page
             navigate("/search");
         } catch (error) {
