@@ -20,9 +20,16 @@ export default function BooksGrid({ books }: BooksGridProps) {
                             <h2 className="text-lg font-semibold capitalize">
                                 {book.title}
                             </h2>
-                            <h4 className="text-gray-600">
+                            <h4>
+                                <b>by: </b>
                                 {book.authors.join(", ")}
                             </h4>
+                            <p>
+                                Published:{" "}
+                                {new Date(book.published_date).getFullYear()}
+                            </p>
+                            <p>Page Count: {book.page_count}</p>
+                            <p>Categories: {book.categories.join(", ")}</p>
                         </div>
                     </CardContent>
                 </Card>

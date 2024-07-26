@@ -15,11 +15,12 @@ class ServerApi {
         return ServerApi.instance;
     }
 
-    public async searchBooks(query: string): Promise<SearchResults> {
+    public async searchBooks(query: string, startIndex: number = 0): Promise<SearchResults> {
         try {
             const response = await axios.get<SearchResults>(`${BASE_URL}/api/books/search`, {
                 params: {
                     query,
+                    startIndex
                 },
             });
             console.log(response.data);
