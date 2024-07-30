@@ -1,4 +1,3 @@
-// src/types/books.ts
 export interface Book {
   google_books_id: string;
   title: string;
@@ -11,11 +10,11 @@ export interface Book {
   currency_code: string;
 }
 
-  
-  export interface SearchResults {
-    books: Book[];
-    query: string;
-    startIndex: number;
-  }
-  
-  export type BookFilterOptions = "none" | "a-z" | "z-a" | "author" | "year" | "page length" | "categories";
+
+export interface SearchResults {
+  books: Book[];
+  query: string;
+  startIndex: number;
+}
+
+export type BookFilterOptions = "none" | "a-z" | "z-a" | "author" | "year" | "page length" | "categories";
