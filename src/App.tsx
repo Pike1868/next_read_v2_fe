@@ -1,3 +1,4 @@
+import Signin from "@/pages/Signin";
 import Signup from "@/pages/Signup";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomeLayout from "./layouts/HomeLayout";
@@ -19,7 +20,8 @@ const router = createBrowserRouter([
             { path: "featured", element: <Featured /> },
             { path: "contact", element: <Contact /> },
             { path: "search", element: <Search /> },
-            { path: "signup", element: <Signup /> },
+            { path: "sign-up", element: <Signup /> },
+            { path: "sign-in", element: <Signin /> },
         ],
     },
 ]);

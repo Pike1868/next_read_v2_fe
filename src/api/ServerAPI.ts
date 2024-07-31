@@ -3,6 +3,8 @@ import {
     SearchByGenreRequest,
     SearchRequest,
     SearchResults,
+    SigninRequest,
+    SigninResponse,
     SignupRequest,
     SignupResponse
 } from '@/types/api';
@@ -58,10 +60,19 @@ class ServerApi {
     // User signup
     public async signup(data: SignupRequest): Promise<SignupResponse> {
         return this.request<SignupRequest, SignupResponse>({
-            endpoint: 'api/users/signup',
+            endpoint: 'api/users/sign-up',
             data,
             method: 'post'
         });
+    }
+
+    //User signin
+    public async signin(data: SigninRequest): Promise<SigninResponse> {
+        return this.request<SigninRequest, SigninResponse>({
+            endpoint: 'api/users/sign-in',
+            data,
+            method: 'post'
+        })
     }
 
     // Search books

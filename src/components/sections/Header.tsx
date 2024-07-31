@@ -68,7 +68,7 @@ export default function Header() {
                         </>
                     ) : (
                         <>
-                            <Link to="/signup">
+                            <Link to="/sign-up">
                                 <Button
                                     variant="outline"
                                     className="text-green-800"
@@ -76,7 +76,7 @@ export default function Header() {
                                     Sign Up
                                 </Button>
                             </Link>
-                            <Link to="/signin">
+                            <Link to="/sign-in">
                                 <Button className="text-white bg-green-800">
                                     Sign In
                                 </Button>

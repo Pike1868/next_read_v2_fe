@@ -2,7 +2,6 @@ import ServerApi from "@/api/ServerAPI";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
 import { loginUser } from "@/features/user/userSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -10,27 +9,11 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import FormInput from "./FormInput";
+import {toast} from "@/components/ui/use-toast"
 
 const formSchema = z.object({
-    username: z
-        .string()
-        .min(2, { message: "Username must be at least 2 characters." }),
     email: z.string().email({ message: "Invalid email address." }),
-    password: z
-        .string()
-        .min(6, { message: "Password must be at least 6 characters." })
-        .regex(/[A-Z]/, {
-            message: "Password must contain at least one uppercase letter.",
-        })
-        .regex(/[a-z]/, {
-            message: "Password must contain at least one lowercase letter.",
-        })
-        .regex(/[0-9]/, {
-            message: "Password must contain at least one number.",
-        })
-        .regex(/[^A-Za-z0-9]/, {
-            message: "Password must contain at least one special character.",
-        }),
+    password: z.string(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -41,7 +24,6 @@ export default function SignupForm() {
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
             email: "",
             password: "",
         },
@@ -51,15 +33,13 @@ export default function SignupForm() {
 
     const handleSubmit = async (data: FormData) => {
         try {
-            const response = await ServerApi.signup(data);
-            const { token } = response;
-            const user = { username: data.username, token };
+            const user = await ServerApi.signin(data);
             dispatch(loginUser(user));
             navigate("/");
         } catch (error) {
-            if(error instanceof Error){
+            if (error instanceof Error) {
                 console.error(error);
-                toast({description:error.message, variant:"destructive"})
+                toast({ description: error.message, variant: "destructive" });
             }
         }
     };
@@ -68,7 +48,8 @@ export default function SignupForm() {
         <section className="grid h-screen place-items-center">
             <Card className="w-96 bg-muted">
                 <CardHeader>
-                    <CardTitle className="text-center">Sign Up</CardTitle>
+                    <CardTitle className="text-center">Welcome Back!</CardTitle>
+                    <p className="text-center">Sign in below</p>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -76,11 +57,6 @@ export default function SignupForm() {
                             onSubmit={form.handleSubmit(handleSubmit)}
                             className="space-y-8"
                         >
-                            <FormInput<FormData>
-                                control={form.control}
-                                name="username"
-                                type="text"
-                            />
                             <FormInput<FormData>
                                 control={form.control}
                                 name="email"
@@ -91,8 +67,11 @@ export default function SignupForm() {
                                 name="password"
                                 type="password"
                             />
-                            <Button type="submit" className="w-full text-xl font-bold text-green-800 bg-white hover:text-white hover:bg-green-800">
-                                Sign Up
+                            <Button
+                                type="submit"
+                                className="w-full text-xl font-bold bg-green-800 hover:text-green-800 hover:bg-white"
+                            >
+                                Sign In
                             </Button>
                         </form>
                     </Form>
