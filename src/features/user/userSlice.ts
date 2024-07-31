@@ -8,6 +8,7 @@ export interface User {
 
 export interface UserState {
     user: User | null;
+    token: string | null;
 }
 
 const getUserFromLocalStorage = (): User | null => {
@@ -15,8 +16,13 @@ const getUserFromLocalStorage = (): User | null => {
     return user ? JSON.parse(user) : null;
 };
 
+const getTokenFromLocalStorage = (): string | null => {
+    return localStorage.getItem("access_token");
+};
+
 const initialState: UserState = {
     user: getUserFromLocalStorage(),
+    token: getTokenFromLocalStorage(),
 };
 
 const userSlice = createSlice({
@@ -26,9 +32,12 @@ const userSlice = createSlice({
         loginUser(state, action: PayloadAction<User>) {
             const user = action.payload;
             state.user = user;
+            state.token = user.token;
             localStorage.setItem('user', JSON.stringify(user));
 
-            toast({ description: "Login successful" });
+            toast({
+                description: "Login successful"
+            });
 
             if (user.username === "demo user") {
                 toast({ description: "Welcome Guest User" });

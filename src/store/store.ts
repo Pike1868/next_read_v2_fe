@@ -4,7 +4,7 @@ import rootReducer, { RootState } from './rootReducer';
 // Defines the interface for the preloaded state
 interface PreloadedState {
     search: RootState['search'];
-    user: RootState['user'];
+    user: RootState['user']; // Note that 'user' includes both 'username' and 'token'
 }
 
 // Function to load state from session storage

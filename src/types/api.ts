@@ -17,6 +17,15 @@ export interface SignupResponse {
     token: string;
 }
 
+export interface SigninRequest extends Record<string,unknown>{
+    email:string,
+    password:string,
+}
+
+export interface SigninResponse extends Record<string, unknown>{
+    username:string,
+    token:string,
+}
 
 export interface SearchRequest extends Record<string, unknown> {
     query: string;
