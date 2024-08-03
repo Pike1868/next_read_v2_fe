@@ -6,7 +6,9 @@ import {
     SigninRequest,
     SigninResponse,
     SignupRequest,
-    SignupResponse
+    SignupResponse,
+    UserProfileRequest,
+    UserProfileResponse
 } from '@/types/api';
 import axios, { AxiosResponse } from 'axios';
 
@@ -17,7 +19,15 @@ class ServerApi {
     private token: string | null;
 
     private constructor() {
-        this.token = localStorage.getItem('token');
+        // Retrieve the entire state from local storage
+        const storedState = localStorage.getItem('state');
+        if (storedState) {
+            const parsedState = JSON.parse(storedState);
+            const user = parsedState?.user?.user || null; // Access the user from the state
+            this.token = user?.token || null;
+        } else {
+            this.token = null;
+        }
     }
 
     public static getInstance(): ServerApi {
@@ -25,6 +35,10 @@ class ServerApi {
             ServerApi.instance = new ServerApi();
         }
         return ServerApi.instance;
+    }
+
+    public setToken(token: string | null) {
+        this.token = token;
     }
 
     private async request<T extends Record<string, unknown>, R = unknown>({
@@ -36,7 +50,7 @@ class ServerApi {
         data?: T;
         method?: RequestMethod;
     }): Promise<R> {
-        console.debug("API Call:", endpoint, data, method);
+        console.log("API Call:", endpoint, data, method, this.token);
 
         const url = `${BASE_URL}/${endpoint}`;
         const headers = this.token ? { Authorization: `Bearer ${this.token}` } : {};
@@ -44,7 +58,9 @@ class ServerApi {
 
         try {
             const response: AxiosResponse<R> = await axios({ url, method, data, params, headers });
+            console.log("ServerApi logging response.data:  ", response.data)
             return response.data;
+
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
                 console.error("API Error:", err.response || err);
@@ -62,7 +78,7 @@ class ServerApi {
         return this.request<SignupRequest, SignupResponse>({
             endpoint: 'api/users/sign-up',
             data,
-            method: 'post'
+            method: "post"
         });
     }
 
@@ -71,7 +87,15 @@ class ServerApi {
         return this.request<SigninRequest, SigninResponse>({
             endpoint: 'api/users/sign-in',
             data,
-            method: 'post'
+            method: "post"
+        })
+    }
+
+    //Fetch user profile information
+    public async getUserProfile(): Promise<UserProfileResponse> {
+        return this.request<UserProfileRequest, UserProfileResponse>({
+            endpoint: "api/users/profile",
+            method: "get"
         })
     }
 
@@ -80,16 +104,16 @@ class ServerApi {
         return this.request<SearchRequest, SearchResults>({
             endpoint: 'api/books/search',
             data: { query, startIndex },
-            method: 'get'
+            method: "get"
         });
     }
 
     // Search books by genre
     public async searchBooksByGenre(genre: string, startIndex: number = 0): Promise<SearchResults> {
         return this.request<SearchByGenreRequest, SearchResults>({
-            endpoint: `api/books/search_genre/${genre}`,
+            endpoint: `api/books/search-genre/${genre}`,
             data: { genre, startIndex },
-            method: 'get'
+            method: "get"
         });
     }
 }

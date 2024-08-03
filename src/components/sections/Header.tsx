@@ -1,16 +1,36 @@
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
 import { logoutUser } from "@/features/user/userSlice";
 import { RootState } from "@/store/rootReducer";
+import { isTokenExpired } from "@/util/jwtHelper";
 import { FaUserAstronaut } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Header() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const user = useSelector((state: RootState) => state.user.user);
 
     const handleLogout = () => {
         dispatch(logoutUser());
+    };
+
+    const handleProfileClick = () => {
+        if (user && !isTokenExpired(user.token)) {
+            console.log("User exists and token is valid!");
+            navigate("/user/profile");
+        } else {
+            console.log(
+                "WARNING:Either user does not exist in state or their token is expired!**********"
+            );
+            dispatch(logoutUser());
+            navigate("/user/sign-in");
+            toast({
+                description: "Session expired. Please sign in again.",
+                variant: "destructive",
+            });
+        }
     };
 
     return (
@@ -48,17 +68,16 @@ export default function Header() {
                 <div className="flex space-x-4">
                     {user ? (
                         <>
-                            <Link to="/profile" className="text-white">
-                                <Button
-                                    variant="outline"
-                                    className="text-green-800 "
-                                >
-                                    <span className="font-normal tracking-wide">
-                                        {user.username}
-                                    </span>
-                                    <FaUserAstronaut className="mb-1 ml-2" />
-                                </Button>
-                            </Link>
+                            <Button
+                                variant="outline"
+                                className="text-green-800"
+                                onClick={handleProfileClick}
+                            >
+                                <span className="font-normal tracking-wide">
+                                    {user.username}
+                                </span>
+                                <FaUserAstronaut className="mb-1 ml-2" />
+                            </Button>
                             <Button
                                 className="text-white bg-green-800"
                                 onClick={handleLogout}
@@ -68,7 +87,7 @@ export default function Header() {
                         </>
                     ) : (
                         <>
-                            <Link to="/sign-up">
+                            <Link to="/user/sign-up">
                                 <Button
                                     variant="outline"
                                     className="text-green-800"
@@ -76,7 +95,7 @@ export default function Header() {
                                     Sign Up
                                 </Button>
                             </Link>
-                            <Link to="/sign-in">
+                            <Link to="/user/sign-in">
                                 <Button className="text-white bg-green-800">
                                     Sign In
                                 </Button>

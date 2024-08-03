@@ -2,14 +2,15 @@ import ServerApi from "@/api/ServerAPI";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { loginUser } from "@/features/user/userSlice";
+import { toast } from "@/components/ui/use-toast";
+import { loginUser, setUserProfile } from "@/features/user/userSlice";
+import { mapUserProfileResponse } from "@/util/mapUserProfileResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import FormInput from "./FormInput";
-import {toast} from "@/components/ui/use-toast"
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address." }),
@@ -35,6 +36,15 @@ export default function SignupForm() {
         try {
             const user = await ServerApi.signin(data);
             dispatch(loginUser(user));
+
+            // Set the token in the ServerApi instance
+            ServerApi.setToken(user.token);
+
+            // Fetch and store user profile
+            const response = await ServerApi.getUserProfile();
+            const userProfile = mapUserProfileResponse(response);
+            dispatch(setUserProfile(userProfile));
+
             navigate("/");
         } catch (error) {
             if (error instanceof Error) {
