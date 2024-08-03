@@ -17,14 +17,27 @@ export interface SignupResponse {
     token: string;
 }
 
-export interface SigninRequest extends Record<string,unknown>{
-    email:string,
-    password:string,
+export interface SigninRequest extends Record<string, unknown> {
+    email: string,
+    password: string,
 }
 
-export interface SigninResponse extends Record<string, unknown>{
-    username:string,
-    token:string,
+export interface SigninResponse extends Record<string, unknown> {
+    username: string,
+    token: string,
+}
+
+export interface UserProfileRequest extends Record<string, unknown> {
+
+}
+
+export interface UserProfileResponse {
+    username: string;
+    email: string;
+    bio: string | null;
+    location: string | null;
+    creation_date: string;
+    image_url: string;
 }
 
 export interface SearchRequest extends Record<string, unknown> {

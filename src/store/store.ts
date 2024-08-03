@@ -1,54 +1,52 @@
+import { isTokenExpired } from '@/util/jwtHelper';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer, { RootState } from './rootReducer';
 
-// Defines the interface for the preloaded state
-interface PreloadedState {
-    search: RootState['search'];
-    user: RootState['user']; // Note that 'user' includes both 'username' and 'token'
-}
-
-// Function to load state from session storage
-const loadState = (): PreloadedState | undefined => {
+// Function to save state to local storage
+const saveState = (state: RootState) => {
     try {
-        // Retrieve stored data from session storage
-        const serializedResults = sessionStorage.getItem('searchResults');
-        const serializedQuery = sessionStorage.getItem('searchQuery');
-        const serializedStartIndex = sessionStorage.getItem('startIndex');
-        const serializedSorting = sessionStorage.getItem('sorting');
-        const serializedUser = localStorage.getItem('user');
+        const serializedState = JSON.stringify(state);
+        localStorage.setItem('state', serializedState);
+    } catch (error) {
+        console.error('Could not save state', error);
+    }
+};
 
-        // If any of the search data is missing, return undefined
-        if (
-            serializedResults === null ||
-            serializedQuery === null ||
-            serializedStartIndex === null ||
-            serializedSorting === null
-        ) {
-            return undefined;
+// Function to load state from local storage
+const loadState = (): RootState | undefined => {
+    try {
+        const serializedState = localStorage.getItem('state');
+        if (serializedState === null) return undefined;
+        const loadedState = JSON.parse(serializedState) as RootState;
+
+        // Check if the token in the user slice is expired
+        if (loadedState.user && loadedState.user.user && isTokenExpired(loadedState.user.user.token)) {
+            return {
+                ...loadedState,
+                user: { user: null, userProfile: null }  // Reset the user state if token is expired
+            };
         }
 
-        // Parse and return the preloaded state
-        return {
-            search: {
-                results: JSON.parse(serializedResults),
-                query: serializedQuery,
-                sorting: serializedSorting as RootState['search']['sorting'],
-                startIndex: JSON.parse(serializedStartIndex),
-            },
-            user: serializedUser ? JSON.parse(serializedUser) : null, // Handle missing user data
-        };
+        return loadedState;
     } catch (error) {
+        console.error('Could not load state', error);
         return undefined;
     }
 };
 
-// Load the preloaded state from session storage
+
+// Load the preloaded state from local storage
 const preloadedState = loadState();
 
 // Configure the Redux store with the root reducer and preloaded state
 const store = configureStore({
     reducer: rootReducer,
     preloadedState,
+});
+
+// Subscribe to store updates and save the state to local storage
+store.subscribe(() => {
+    saveState(store.getState());
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -1,4 +1,6 @@
 import { toast } from "@/components/ui/use-toast";
+import { UserProfileProps } from "@/types/user";
+import { isTokenExpired } from "@/util/jwtHelper";
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface User {
@@ -8,22 +10,27 @@ export interface User {
 
 export interface UserState {
     user: User | null;
-    token: string | null;
+    userProfile: UserProfileProps | null;
 }
 
 const getUserFromLocalStorage = (): User | null => {
     const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
-};
-
-const getTokenFromLocalStorage = (): string | null => {
-    return localStorage.getItem("access_token");
+    if (user) {
+        const parsedUser = JSON.parse(user);
+        if (isTokenExpired(parsedUser.token)) {
+            localStorage.removeItem("user");
+            return null
+        }
+        return parsedUser;
+    }
+    return null
 };
 
 const initialState: UserState = {
     user: getUserFromLocalStorage(),
-    token: getTokenFromLocalStorage(),
+    userProfile: null,
 };
+
 
 const userSlice = createSlice({
     name: 'user',
@@ -32,24 +39,23 @@ const userSlice = createSlice({
         loginUser(state, action: PayloadAction<User>) {
             const user = action.payload;
             state.user = user;
-            state.token = user.token;
-            localStorage.setItem('user', JSON.stringify(user));
-
-            toast({
-                description: "Login successful"
-            });
+            toast({ description: "Login successful" });
 
             if (user.username === "demo user") {
                 toast({ description: "Welcome Guest User" });
             }
         },
+        setUserProfile(state, action: PayloadAction<UserProfileProps>) {
+            state.userProfile = action.payload; // Update profile in state
+        },
         logoutUser(state) {
             state.user = null;
-            localStorage.removeItem('user');
+            state.userProfile = null; // Clear profile on logout
+            localStorage.removeItem('state');
             toast({ description: "Logout successful" });
         }
     },
 });
 
-export const { loginUser, logoutUser } = userSlice.actions;
+export const { loginUser, setUserProfile, logoutUser } = userSlice.actions;
 export default userSlice.reducer;
