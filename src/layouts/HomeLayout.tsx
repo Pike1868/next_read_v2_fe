@@ -7,14 +7,15 @@ const HomeLayout = () => {
     const isPageLoading = navigation.state === "loading";
 
     return (
-        <>
+        <main className="flex flex-col min-h-screen">
             <Header />
 
-            <div className="container px-4 mx-auto">
+            <div className="container flex-grow px-4 mx-auto">
                 {isPageLoading ? <p>Loading...</p> : <Outlet />}
             </div>
+
             <Footer />
-        </>
+        </main>
     );
 };
 

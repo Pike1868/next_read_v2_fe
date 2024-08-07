@@ -29,10 +29,10 @@ export default function Searchbar() {
         try {
             // Fetch search results from the API
             const results = await ServerApi.searchBooks(query, 0);
-            console.log("Search Results: ", results.books);
+            console.log("Search Results: ", results.data.books);
 
             // Update Redux store with search results
-            dispatch(setSearchResults(results.books));
+            dispatch(setSearchResults(results.data.books));
 
             // Navigate to the search results page
             navigate("book/search");

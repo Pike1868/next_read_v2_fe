@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserProfileProps } from "@/types/user";
 import { FaUserAstronaut } from "react-icons/fa6";
@@ -47,11 +46,6 @@ export default function UserProfile({
                     </p>
                 </CardContent>
             </Card>
-
-            <div className="flex space-x-4">
-                <Button variant="outline">Edit Profile</Button>
-                <Button variant="destructive">Delete Profile</Button>
-            </div>
         </section>
     );
 }
