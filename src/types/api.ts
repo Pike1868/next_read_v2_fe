@@ -2,6 +2,12 @@ import { Book } from "./books";
 
 export type RequestMethod = "get" | "post" | "put" | "delete";
 
+export type ApiResponse<T> = {
+    data: T;
+    status: number;
+};
+
+
 /**
  * Extending `Record<string, unknown>` ensures that the generic type T is always an object with string keys.
  * This is useful for utility functions that need to handle flexible object types in TypeScript.
@@ -39,6 +45,20 @@ export interface UserProfileResponse {
     creation_date: string;
     image_url: string;
 }
+
+export interface EditUserRequest extends Record<string, unknown> {
+    username: string;
+    email: string;
+    bio: string,
+    location: string,
+    image_url: string,
+    password: string;
+}
+
+export interface EditUserResponse extends Record<string, unknown> {
+    msg: string,
+}
+
 
 export interface SearchRequest extends Record<string, unknown> {
     query: string;

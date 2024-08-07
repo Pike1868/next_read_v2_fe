@@ -1,4 +1,7 @@
 import {
+    ApiResponse,
+    EditUserRequest,
+    EditUserResponse,
     RequestMethod,
     SearchByGenreRequest,
     SearchRequest,
@@ -49,7 +52,7 @@ class ServerApi {
         endpoint: string;
         data?: T;
         method?: RequestMethod;
-    }): Promise<R> {
+    }): Promise<ApiResponse<R>> {
         console.log("API Call:", endpoint, data, method, this.token);
 
         const url = `${BASE_URL}/${endpoint}`;
@@ -58,8 +61,8 @@ class ServerApi {
 
         try {
             const response: AxiosResponse<R> = await axios({ url, method, data, params, headers });
-            console.log("ServerApi logging response.data:  ", response.data)
-            return response.data;
+            // console.log("ServerApi logging response:  ", response)
+            return response
 
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
@@ -73,8 +76,8 @@ class ServerApi {
         }
     }
 
-    // User signup
-    public async signup(data: SignupRequest): Promise<SignupResponse> {
+    // User sign-up
+    public async signup(data: SignupRequest): Promise<ApiResponse<SignupResponse>> {
         return this.request<SignupRequest, SignupResponse>({
             endpoint: 'api/users/sign-up',
             data,
@@ -82,8 +85,8 @@ class ServerApi {
         });
     }
 
-    //User signin
-    public async signin(data: SigninRequest): Promise<SigninResponse> {
+    //User sign-in
+    public async signin(data: SigninRequest): Promise<ApiResponse<SigninResponse>> {
         return this.request<SigninRequest, SigninResponse>({
             endpoint: 'api/users/sign-in',
             data,
@@ -92,15 +95,24 @@ class ServerApi {
     }
 
     //Fetch user profile information
-    public async getUserProfile(): Promise<UserProfileResponse> {
+    public async getUserProfile(): Promise<ApiResponse<UserProfileResponse>> {
         return this.request<UserProfileRequest, UserProfileResponse>({
             endpoint: "api/users/profile",
             method: "get"
         })
     }
 
+    //Edit user profile information
+    public async editUser(data: EditUserRequest): Promise<ApiResponse<EditUserResponse>> {
+        return this.request<EditUserRequest, EditUserResponse>({
+            endpoint: "api/users/profile/edit",
+            data,
+            method: "post"
+        })
+    }
+
     // Search books
-    public async searchBooks(query: string, startIndex: number = 0): Promise<SearchResults> {
+    public async searchBooks(query: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchRequest, SearchResults>({
             endpoint: 'api/books/search',
             data: { query, startIndex },
@@ -109,7 +121,7 @@ class ServerApi {
     }
 
     // Search books by genre
-    public async searchBooksByGenre(genre: string, startIndex: number = 0): Promise<SearchResults> {
+    public async searchBooksByGenre(genre: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchByGenreRequest, SearchResults>({
             endpoint: `api/books/search-genre/${genre}`,
             data: { genre, startIndex },
