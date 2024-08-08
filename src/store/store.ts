@@ -1,6 +1,7 @@
 import { isTokenExpired } from '@/util/jwtHelper';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer, { RootState } from './rootReducer';
+import authListenerMiddleware from '@/middleware/authListenerMiddleware';
 
 // Function to save state to local storage
 const saveState = (state: RootState) => {
@@ -42,6 +43,8 @@ const preloadedState = loadState();
 const store = configureStore({
     reducer: rootReducer,
     preloadedState,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().prepend(authListenerMiddleware.middleware),
 });
 
 // Subscribe to store updates and save the state to local storage
