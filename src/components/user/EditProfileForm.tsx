@@ -4,7 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import { setUserProfile } from "@/features/user/userSlice";
+import { AppDispatch } from "@/store/store";
+import { ApiErrorResponse } from "@/types/api";
 import { UserProfileProps } from "@/types/user";
+import { handleApiError } from "@/util/errorHandler";
 import { mapUserProfileResponse } from "@/util/mapUserProfileResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -36,7 +39,7 @@ export default function EditProfileForm({
     imageUrl,
     closeModal,
 }: EditProfileFormProps) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     // Initialize the form with react-hook-form, using zod for validation
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
@@ -55,14 +58,17 @@ export default function EditProfileForm({
             const response = await ServerApi.editUser(data);
 
             if (response.status === 200) {
-                // Fetch and store user profile
+                // Handle success
                 const user = await ServerApi.getUserProfile();
                 const userProfile = mapUserProfileResponse(user.data);
+                // Update redux state
                 dispatch(setUserProfile(userProfile));
 
-                //Close edit form and toast feedback to user
                 closeModal();
                 toast({ description: response.data.msg, variant: "default" });
+            } else {
+                const errorResponse = response.data as ApiErrorResponse;
+                handleApiError(errorResponse, dispatch);
             }
         } catch (error) {
             if (error instanceof Error) {
