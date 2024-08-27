@@ -52,15 +52,21 @@ export default function SignupForm() {
 
     const handleSubmit = async (data: FormData) => {
         try {
-            const user = await ServerApi.signin(data);
-            dispatch(loginUser(user.data));
+            // Use the signup method to register the user
+            const response = await ServerApi.signup(data);
+            const token = response.data.token;
 
             // Set the token in the ServerApi instance
-            ServerApi.setToken(user.data.token);
+            ServerApi.setToken(token);
+
+            // Dispatch the loginUser action with the form data
+            dispatch(loginUser({ username: data.username, token }));
 
             // Fetch and store user profile
-            const response = await ServerApi.getUserProfile();
-            const userProfile = mapUserProfileResponse(response.data);
+            const userProfileResponse = await ServerApi.getUserProfile();
+            const userProfile = mapUserProfileResponse(
+                userProfileResponse.data
+            );
             dispatch(setUserProfile(userProfile));
 
             navigate("/");

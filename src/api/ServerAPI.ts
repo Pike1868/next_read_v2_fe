@@ -79,7 +79,6 @@ class ServerApi {
         }
     }
 
-    // Example methods
     public async signup(data: SignupRequest): Promise<ApiResponse<SignupResponse>> {
         return this.request<SignupRequest, SignupResponse>({
             endpoint: 'api/users/sign-up',
@@ -111,6 +110,13 @@ class ServerApi {
         });
     }
 
+    public async deleteUser(): Promise<ApiResponse<{ msg: string }>> {
+        return this.request<Record<string, never>, { msg: string }>({
+            endpoint: "api/users/delete",
+            method: "post",
+        });
+    }
+    
     public async searchBooks(query: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchRequest, SearchResults>({
             endpoint: 'api/books/search',
