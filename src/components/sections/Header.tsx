@@ -34,7 +34,7 @@ export default function Header() {
     };
 
     return (
-        <header className="bg-[#212529] h-16 shadow-md">
+        <header className="bg-[#212529] h-16 shadow-md w-full">
             <div className="container flex items-center justify-between px-4 py-2 mx-auto">
                 <div className="flex items-center">
                     <img

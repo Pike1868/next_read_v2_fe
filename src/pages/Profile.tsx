@@ -62,35 +62,37 @@ export default function Profile() {
     }
 
     return (
-        <div className="mb-24">
-            {!isEditing ? (
-                <div>
-                    <UserProfile {...userProfile} />
-                    <div className="flex space-x-4">
-                        <Button variant="outline" onClick={handleEditClick}>
-                            Edit Profile
-                        </Button>
-                        <Button
-                            variant="destructive"
-                            onClick={handleDeleteClick}
-                        >
-                            Delete Profile
-                        </Button>
+        <>
+            <div className="mb-24">
+                {!isEditing ? (
+                    <div>
+                        <UserProfile {...userProfile} />
+                        <div className="flex space-x-4">
+                            <Button variant="outline" onClick={handleEditClick}>
+                                Edit Profile
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                onClick={handleDeleteClick}
+                            >
+                                Delete Profile
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <div className="modal">
-                    <EditProfileForm
-                        {...userProfile}
-                        closeModal={handleCloseModal}
-                    />
-                </div>
-            )}
+                ) : (
+                    <div className="modal">
+                        <EditProfileForm
+                            {...userProfile}
+                            closeModal={handleCloseModal}
+                        />
+                    </div>
+                )}
+            </div>
             <ConfirmDeleteModal
                 isOpen={isDeleteModalOpen}
                 onConfirm={handleConfirmDelete}
                 onCancel={() => setIsDeleteModalOpen(false)}
             />
-        </div>
+        </>
     );
 }

@@ -1,12 +1,5 @@
-import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
+import Modal from "@/components/ui/modal";
+import React from "react";
 
 interface ConfirmDeleteModalProps {
     isOpen: boolean;
@@ -14,30 +7,26 @@ interface ConfirmDeleteModalProps {
     onCancel: () => void;
 }
 
-export default function ConfirmDeleteModal({
+const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
     isOpen,
     onConfirm,
     onCancel,
-}: ConfirmDeleteModalProps) {
+}) => {
     return (
-        <Dialog open={isOpen} onOpenChange={onCancel}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Confirm Account Deletion</DialogTitle>
-                    <DialogDescription>
-                        Are you sure you want to delete your account? This
-                        action cannot be undone.
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                    <Button variant="destructive" onClick={onConfirm}>
-                        Delete
-                    </Button>
-                    <Button variant="outline" onClick={onCancel}>
-                        Cancel
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <Modal
+            isOpen={isOpen}
+            onClose={onCancel}
+            onConfirm={onConfirm}
+            title="Confirm Account Deletion"
+        >
+            <p className="text-sm break-words sm:text-base">
+                Are you sure you want to delete your account?
+            </p>
+            <p className="mt-2 text-sm font-semibold text-red-600 break-words sm:text-base">
+                This action cannot be undone.
+            </p>
+        </Modal>
     );
-}
+};
+
+export default ConfirmDeleteModal;

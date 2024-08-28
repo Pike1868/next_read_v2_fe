@@ -7,7 +7,7 @@ const HomeLayout = () => {
     const isPageLoading = navigation.state === "loading";
 
     return (
-        <main className="flex flex-col min-h-screen">
+        <main className="relative flex flex-col min-h-screen">
             <Header />
 
             <div className="container flex-grow px-4 mx-auto">
