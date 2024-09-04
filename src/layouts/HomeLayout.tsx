@@ -11,6 +11,7 @@ const HomeLayout = () => {
             <Header />
 
             <div className="container flex-grow px-4 mx-auto">
+
                 {isPageLoading ? <p>Loading...</p> : <Outlet />}
             </div>
 
