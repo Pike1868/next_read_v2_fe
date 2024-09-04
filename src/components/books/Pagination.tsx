@@ -12,7 +12,7 @@ export default function Pagination() {
         const newIndex = startIndex + 40;
         dispatch(setStartIndex(newIndex));
         const results = await ServerApi.searchBooks(query, newIndex);
-        dispatch(setSearchResults(results.books));
+        dispatch(setSearchResults(results.data.books));
     };
 
     const handlePreviousPage = async () => {
@@ -20,7 +20,7 @@ export default function Pagination() {
             const newIndex = startIndex - 40;
             dispatch(setStartIndex(newIndex));
             const results = await ServerApi.searchBooks(query, newIndex);
-            dispatch(setSearchResults(results.books));
+            dispatch(setSearchResults(results.data.books));
         }
     };
 
