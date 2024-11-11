@@ -8,7 +8,10 @@ export interface Book {
   categories: string[];
   retail_price: number;
   currency_code: string;
+  description: string;
+  publisher: string;
 }
+
 
 export interface BookDetailsResponse {
   title: string;
@@ -17,7 +20,7 @@ export interface BookDetailsResponse {
   publishedDate: string;
   description: string;
   imageLinks: {
-      thumbnail: string;
+    thumbnail: string;
   };
 
 }

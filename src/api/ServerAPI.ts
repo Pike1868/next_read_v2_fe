@@ -142,6 +142,14 @@ class ServerApi {
         });
     }
 
+    public async saveBookStatus(googleBooksId: string, status: string): Promise<ApiResponse<{ msg: string }>> {
+        return this.request<{ google_books_id: string; status: string }, { msg: string }>({
+            endpoint: 'api/books/save-book',
+            data: { google_books_id: googleBooksId, status },
+            method: "post"
+        });
+    }
+
 
 }
 

@@ -25,7 +25,11 @@ const loadState = (): RootState | undefined => {
             return {
                 ...loadedState,
                 user: { user: null, userProfile: null },  // Reset the user state if token is expired
-                book: { currentBook: null },  // Clear the book state as well
+                book: {
+                    currentBook: null,  // Clear the book state as well
+                    savedBooks: [] // Initialize savedBooks as an empty array
+                },
+
             };
         }
 
