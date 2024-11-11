@@ -10,6 +10,17 @@ export interface Book {
   currency_code: string;
 }
 
+export interface BookDetailsResponse {
+  title: string;
+  authors: string[];
+  publisher: string;
+  publishedDate: string;
+  description: string;
+  imageLinks: {
+      thumbnail: string;
+  };
+
+}
 
 export interface SearchResults {
   books: Book[];

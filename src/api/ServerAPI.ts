@@ -1,5 +1,6 @@
 import {
     ApiResponse,
+    BookDetailsApiResponse,
     EditUserRequest,
     EditUserResponse,
     RequestMethod,
@@ -116,7 +117,7 @@ class ServerApi {
             method: "post",
         });
     }
-    
+
     public async searchBooks(query: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchRequest, SearchResults>({
             endpoint: 'api/books/search',
@@ -132,6 +133,16 @@ class ServerApi {
             method: "get"
         });
     }
+
+
+    public async getBookDetails(volumeId: string): Promise<ApiResponse<BookDetailsApiResponse>> {
+        return this.request<Record<string, never>, BookDetailsApiResponse>({
+            endpoint: `api/books/detail/${volumeId}`,
+            method: "get",
+        });
+    }
+
+
 }
 
 export default ServerApi.getInstance();

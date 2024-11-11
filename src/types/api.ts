@@ -1,4 +1,4 @@
-import { Book } from "./books";
+import { Book, BookDetailsResponse } from "./books";
 
 export type RequestMethod = "get" | "post" | "put" | "delete";
 
@@ -78,4 +78,7 @@ export interface SearchResults {
 export interface SearchByGenreRequest extends Record<string, unknown> {
     genre: string;
     startIndex: number;
+}
+export interface BookDetailsApiResponse {
+    book: BookDetailsResponse;
 }
