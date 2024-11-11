@@ -1,6 +1,7 @@
 import PrivateRoute from "@/components/user/PrivateRoute";
 import HomeLayout from "@/layouts/HomeLayout";
 import About from "@/pages/About";
+import BookDetails from "@/pages/BookDetails";
 import Contact from "@/pages/Contact";
 import ErrorPage from "@/pages/Error";
 import Featured from "@/pages/Featured";
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
                 element: <PrivateRoute />,
                 children: [{ path: "", element: <Profile /> }],
             },
+            { path: "book/:volume_id", element: <BookDetails /> },
         ],
     },
 ]);
