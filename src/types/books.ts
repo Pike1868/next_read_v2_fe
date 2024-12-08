@@ -13,17 +13,20 @@ export interface Book {
 }
 
 
-export interface BookDetailsResponse {
-  title: string;
-  authors: string[];
-  publisher: string;
-  publishedDate: string;
-  description: string;
-  imageLinks: {
-    thumbnail: string;
-  };
 
+export interface BookDetailsResponse {
+  title?: string;
+  authors?: string[];
+  imageLinks?: { thumbnail?: string };
+  publishedDate?: string;
+  pageCount?: number;
+  categories?: string[];
+  description?: string;
+  publisher?: string;
 }
+
+
+
 
 export interface SearchResults {
   books: Book[];

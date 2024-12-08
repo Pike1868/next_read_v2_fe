@@ -80,5 +80,25 @@ export interface SearchByGenreRequest extends Record<string, unknown> {
     startIndex: number;
 }
 export interface BookDetailsApiResponse {
+    google_books_id: string;
     book: BookDetailsResponse;
+}
+export interface UserBooksResponse {
+    currently_reading: ApiBook[];
+    want_to_read: ApiBook[];
+    previously_read: ApiBook[];
+}
+
+
+export interface ApiBook {
+    google_books_id: string;
+    title: string;
+    authors: string[];
+    thumbnail_url: string;
+    published_date: string;
+    page_count: number;
+    description: string;
+    publisher: string;
+    average_rating?: number | null;
+    ratings_count?: number;
 }

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
+import { setSavedBooks } from "@/features/book/bookSlice";
 import { loginUser, setUserProfile } from "@/features/user/userSlice";
 import { mapUserProfileResponse } from "@/util/mapUserProfileResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +20,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export default function SignupForm() {
+export default function SigninForm() {
     const dispatch = useDispatch();
     // Initialize the form with react-hook-form, using zod for validation
     const form = useForm<FormData>({
@@ -44,6 +45,14 @@ export default function SignupForm() {
             const response = await ServerApi.getUserProfile();
             const userProfile = mapUserProfileResponse(response.data);
             dispatch(setUserProfile(userProfile));
+
+            // Fetch and store user's saved books
+            const savedBooksResponse = await ServerApi.getUserBooks();
+            console.log(
+                "===================================",
+                savedBooksResponse
+            );
+            dispatch(setSavedBooks(savedBooksResponse.data)); // Dispatch the action to set saved books
 
             navigate("/");
         } catch (error) {
