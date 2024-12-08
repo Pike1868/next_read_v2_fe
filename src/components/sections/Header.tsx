@@ -7,7 +7,11 @@ import { FaUserAstronaut } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Header() {
+interface HeaderProps {
+    onOpenSavedBooks?: () => void; // Add this prop for opening the saved books modal
+}
+
+export default function Header({ onOpenSavedBooks }: HeaderProps) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state: RootState) => state.user.user);
@@ -18,12 +22,8 @@ export default function Header() {
 
     const handleProfileClick = () => {
         if (user && !isTokenExpired(user.token)) {
-            console.log("User exists and token is valid!");
             navigate("/user/profile");
         } else {
-            console.log(
-                "WARNING:Either user does not exist in state or their token is expired!**********"
-            );
             dispatch(logoutUser());
             navigate("/user/sign-in");
             toast({
@@ -68,6 +68,14 @@ export default function Header() {
                 <div className="flex space-x-4">
                     {user ? (
                         <>
+                            {/* My Books button to open modal */}
+                            <Button
+                                variant="outline"
+                                className="text-green-800"
+                                onClick={onOpenSavedBooks}
+                            >
+                                My Books
+                            </Button>
                             <Button
                                 variant="outline"
                                 className="text-green-800"

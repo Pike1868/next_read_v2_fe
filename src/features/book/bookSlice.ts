@@ -1,55 +1,155 @@
+import ServerApi from '@/api/ServerAPI';
+import { ApiBook, UserBooksResponse } from '@/types/api';
 import { Book } from '@/types/books'; // Import Book interface
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+const toBook = (apiBook: ApiBook, status: string): Book & { status: string } => {
+    return {
+        google_books_id: apiBook.google_books_id,
+        title: apiBook.title || "Unknown Title",
+        authors: apiBook.authors || ["Unknown Author"],
+        thumbnail_url: apiBook.thumbnail_url || "/bookcover-na.jpg",
+        published_date: apiBook.published_date || "",
+        page_count: apiBook.page_count || 0,
+        categories: [], // Assume empty since it's not in the response
+        retail_price: 0, // Assume default as it's not in the response
+        currency_code: "", // Assume empty since it's not in the response
+        description: apiBook.description || "No description available.",
+        publisher: apiBook.publisher || "Unknown Publisher",
+        status,
+    };
+};
+
+// Thunk for removing a book
+export const removeBookFromServer = createAsyncThunk(
+    'book/removeBook',
+    async (google_books_id: string, { rejectWithValue }) => {
+        try {
+            await ServerApi.removeBook(google_books_id);
+            console.log("")
+            return { google_books_id }; // Return the ID of the removed book
+
+        } catch (error: unknown) {
+            // Type guard to handle error type properly
+            if (error instanceof Error) {
+                console.error('Failed to remove book:', error.message);
+                return rejectWithValue(error.message);
+            } else {
+                console.error('Unknown error occurred while removing book:', error);
+                return rejectWithValue('An unknown error occurred');
+            }
+        }
+    }
+);
+
 
 export interface BookState {
     currentBook: Book | null; // Current book being viewed for details
-    savedBooks: (Book & { status: string })[]; // Array of saved books with their statuses
+    savedBooks: {
+        currentlyReading: (Book & { status: string })[];
+        wantToRead: (Book & { status: string })[];
+        previouslyRead: (Book & { status: string })[];
+    };
 }
 
 const initialState: BookState = {
     currentBook: null,
-    savedBooks: [], // Initialize with an empty array
+    savedBooks: {
+        currentlyReading: [],
+        wantToRead: [],
+        previouslyRead: [],
+    }, // Initialize with empty arrays for each category
 };
+
+
+
 
 const bookSlice = createSlice({
     name: 'book',
     initialState,
     reducers: {
-        // Set the current book details when user clicks to view a book's details
         setBookDetails(state, action: PayloadAction<Book>) {
             state.currentBook = action.payload;
         },
-        // Clear the current book details when leaving the book details page
         clearBookDetails(state) {
             state.currentBook = null;
         },
-        // Add a book to the savedBooks list (when user saves a book)
         addSavedBook(state, action: PayloadAction<Book & { status: string }>) {
-            state.savedBooks.push(action.payload); // Add saved book to the list with status
+            const { status } = action.payload;
+            switch (status) {
+                case 'Currently Reading':
+                    state.savedBooks.currentlyReading.push(action.payload);
+                    break;
+                case 'Want to Read':
+                    state.savedBooks.wantToRead.push(action.payload);
+                    break;
+                case 'Previously Read':
+                    state.savedBooks.previouslyRead.push(action.payload);
+                    break;
+                default:
+                    break;
+            }
         },
-        // Update the status of a saved book
         updateSavedBookStatus(
             state,
             action: PayloadAction<{ google_books_id: string; status: string }>
         ) {
-            const index = state.savedBooks.findIndex(
-                (book) => book.google_books_id === action.payload.google_books_id
-            );
-            if (index !== -1) {
-                state.savedBooks[index].status = action.payload.status; // Update the status of the book
-            }
+            const { google_books_id, status } = action.payload;
+            // Find the book in the correct category and update its status
+            ['currentlyReading', 'wantToRead', 'previouslyRead'].forEach(category => {
+                const index = state.savedBooks[category as keyof BookState['savedBooks']].findIndex(
+                    (book) => book.google_books_id === google_books_id
+                );
+                if (index !== -1) {
+                    // Remove from old category and push to the new category
+                    const [book] = state.savedBooks[category as keyof BookState['savedBooks']].splice(index, 1);
+                    book.status = status;
+                    state.savedBooks[status.toLowerCase().replace(' ', '') as keyof BookState['savedBooks']].push(book);
+                }
+            });
         },
-        // Remove a book from the savedBooks list
-        removeSavedBook(state, action: PayloadAction<string>) {
-            state.savedBooks = state.savedBooks.filter(
-                (book) => book.google_books_id !== action.payload
-            );
+        removeSavedBook(state, action: PayloadAction<{ google_books_id: string }>) {
+            const { google_books_id } = action.payload;
+            // Remove book from the respective category
+            ['currentlyReading', 'wantToRead', 'previouslyRead'].forEach(category => {
+                state.savedBooks[category as keyof BookState['savedBooks']] = state.savedBooks[category as keyof BookState['savedBooks']].filter(
+                    (book) => book.google_books_id !== google_books_id
+                );
+            });
         },
-        // Set the entire list of saved books (e.g., after fetching user books from backend)
-        setSavedBooks(state, action: PayloadAction<(Book & { status: string })[]>) {
-            state.savedBooks = action.payload; // Set all the user's saved books
-        },
+        //maybe should change this to setSavedLibrary or something later
+        setSavedBooks(state, action: PayloadAction<UserBooksResponse>) {
+            const { currently_reading, want_to_read, previously_read } = action.payload;
+
+            state.savedBooks = {
+                currentlyReading: currently_reading.map((b) => toBook(b, "Currently Reading")),
+                wantToRead: want_to_read.map((b) => toBook(b, "Want to Read")),
+                previouslyRead: previously_read.map((b) => toBook(b, "Previously Read")),
+            };
+        }
+
     },
+    extraReducers: (builder) => {
+        builder.addCase(removeBookFromServer.fulfilled, (state, action) => {
+            // Update the state when the backend confirms the book is removed
+            state.savedBooks = {
+                currentlyReading: state.savedBooks.currentlyReading?.filter(
+                    (book) => book.google_books_id !== action.payload.google_books_id
+                ) || [],
+                wantToRead: state.savedBooks.wantToRead?.filter(
+                    (book) => book.google_books_id !== action.payload.google_books_id
+                ) || [],
+                previouslyRead: state.savedBooks.previouslyRead?.filter(
+                    (book) => book.google_books_id !== action.payload.google_books_id
+                ) || [],
+            };
+        });
+        builder.addCase(removeBookFromServer.rejected, (state, action) => {
+            console.error("Failed to remove book:", action.payload);
+        });
+
+    },
+
 });
 
 export const {
@@ -58,7 +158,7 @@ export const {
     addSavedBook,
     updateSavedBookStatus,
     removeSavedBook,
-    setSavedBooks,
+    setSavedBooks, //maybe should change this to setSavedLibrary or something later
 } = bookSlice.actions;
 
 export default bookSlice.reducer;

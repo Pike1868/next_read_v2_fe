@@ -41,23 +41,22 @@ export default function BookDetails() {
             const response = await ServerApi.getBookDetails(volumeId);
             const bookData: BookDetailsResponse = response.data.book;
 
-            // Map the BookDetailsResponse to the full Book object
+            // Transform BookDetailsResponse to Book
             const book: Book = {
-                google_books_id: volumeId, // Use volumeId as google_books_id
-                title: bookData.title,
-                authors: bookData.authors,
-                thumbnail_url: bookData.imageLinks?.thumbnail || DEFAULT_IMAGE, // Default image if not available
-                published_date: bookData.publishedDate,
-                page_count: 0, // Default or fetch this field if available elsewhere
-                categories: [], // Categories may need to be fetched or mapped separately
-                retail_price: 0, // If available from another source, set this field
-                currency_code: "USD", // You can adjust this as needed
+                google_books_id: volumeId,
+                title: bookData.title || "Unknown Title",
+                authors: bookData.authors || ["Unknown Author"],
+                thumbnail_url: bookData.imageLinks?.thumbnail || DEFAULT_IMAGE,
+                published_date: bookData.publishedDate || "",
+                page_count: bookData.pageCount || 0,
+                categories: bookData.categories || [],
+                retail_price: 0, // If unavailable, set a default
+                currency_code: "USD", // Default to USD
                 description:
-                    bookData.description || "Description not available", // Add description
-                publisher: bookData.publisher || "Publisher not available", // Add publisher
+                    bookData.description || "Description not available",
+                publisher: bookData.publisher || "Publisher not available",
             };
 
-            // Dispatch the book details to Redux
             dispatch(setBookDetails(book));
         } catch (error) {
             console.error("Failed to load book details:", error);

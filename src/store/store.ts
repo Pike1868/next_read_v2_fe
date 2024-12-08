@@ -24,12 +24,24 @@ const loadState = (): RootState | undefined => {
         if (loadedState.user && loadedState.user.user && isTokenExpired(loadedState.user.user.token)) {
             return {
                 ...loadedState,
-                user: { user: null, userProfile: null },  // Reset the user state if token is expired
+                user: { user: null, userProfile: null }, // Reset the user state if token is expired
                 book: {
-                    currentBook: null,  // Clear the book state as well
-                    savedBooks: [] // Initialize savedBooks as an empty array
+                    currentBook: null, // Clear the book state as well
+                    savedBooks: { // Initialize savedBooks with the correct structure
+                        currentlyReading: [],
+                        wantToRead: [],
+                        previouslyRead: [],
+                    },
                 },
+            };
+        }
 
+        // Ensure savedBooks has the correct structure
+        if (!loadedState.book.savedBooks || Array.isArray(loadedState.book.savedBooks)) {
+            loadedState.book.savedBooks = {
+                currentlyReading: [],
+                wantToRead: [],
+                previouslyRead: [],
             };
         }
 
@@ -39,6 +51,8 @@ const loadState = (): RootState | undefined => {
         return undefined;
     }
 };
+
+
 
 // Load the preloaded state from local storage
 const preloadedState = loadState();
