@@ -35,7 +35,7 @@ export default function Searchbar() {
             dispatch(setSearchResults(results.data.books));
 
             // Navigate to the search results page
-            navigate("book/search");
+            navigate("/book/search");
         } catch (error) {
             console.error("Error searching books, ", error);
         }
