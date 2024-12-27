@@ -1,5 +1,6 @@
 import {
     ApiResponse,
+    BookDetailsApiResponse,
     EditUserRequest,
     EditUserResponse,
     RequestMethod,
@@ -10,6 +11,7 @@ import {
     SigninResponse,
     SignupRequest,
     SignupResponse,
+    UserBooksResponse,
     UserProfileRequest,
     UserProfileResponse
 } from '@/types/api';
@@ -62,6 +64,8 @@ class ServerApi {
         try {
             const response: AxiosResponse<R> = await axios({ url, method, data, params, headers });
             // Wrap the response to conform to custom ApiResponse type
+
+            console.log("+++++++++++", response)
             return {
                 data: response.data,
                 status: response.status,
@@ -116,7 +120,7 @@ class ServerApi {
             method: "post",
         });
     }
-    
+
     public async searchBooks(query: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchRequest, SearchResults>({
             endpoint: 'api/books/search',
@@ -132,6 +136,44 @@ class ServerApi {
             method: "get"
         });
     }
+
+
+    public async getBookDetails(volumeId: string): Promise<ApiResponse<BookDetailsApiResponse>> {
+        return this.request<Record<string, never>, BookDetailsApiResponse>({
+            endpoint: `api/books/detail/${volumeId}`,
+            method: "get",
+        });
+    }
+
+    public async saveBookStatus(googleBooksId: string, status: string): Promise<ApiResponse<{ msg: string }>> {
+        return this.request<{ google_books_id: string; status: string }, { msg: string }>({
+            endpoint: 'api/books/save-book',
+            data: { google_books_id: googleBooksId, status },
+            method: "post"
+        });
+    }
+
+    public async removeBook(volumeId: string): Promise<ApiResponse<{ msg: string }>> {
+        return this.request<Record<string, never>, { msg: string }>({
+            endpoint: `api/books/${volumeId}/remove`,
+            method: "post",
+        });
+    }
+
+    // New method to fetch user books categorized by their status
+    public async getUserBooks(): Promise<ApiResponse<UserBooksResponse>> {
+        const response = await this.request<Record<string, never>, UserBooksResponse>({
+            endpoint: 'api/books/user-books',
+            method: "get",
+        });
+
+        console.log("Fetched User Books Response:", response);
+        return response;
+    }
+
+
+
+
 }
 
 export default ServerApi.getInstance();
