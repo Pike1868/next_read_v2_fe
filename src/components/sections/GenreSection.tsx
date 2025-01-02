@@ -58,7 +58,7 @@ export default function GenresSection() {
             const results = await ServerApi.searchBooksByGenre(genre);
 
             // Update search results in the Redux store
-            dispatch(setSearchResults(results.books));
+            dispatch(setSearchResults(results.data.books));
 
             // Navigate to the search page to display results
             navigate("book/search");
