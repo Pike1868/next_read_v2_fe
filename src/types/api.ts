@@ -101,4 +101,27 @@ export interface ApiBook {
     publisher: string;
     average_rating?: number | null;
     ratings_count?: number;
+export interface FeaturedBook {
+    google_books_id: string;
+    title: string;
+    author: string;
+    description?: string | undefined;
+    book_image?: string;
+    thumbnail_url?: string; // Add this field
+    rank?: number;
+    google_thumbnail_url?: string;
+}
+
+
+
+export interface FeaturedListData {
+    list_name: string;
+    display_name: string;
+    books: FeaturedBook[];
+}
+
+export interface FeaturedListsResponse {
+    bestsellers_date?: string;     // depending on the API shape
+    published_date?: string;       // might be optional
+    featured_lists: FeaturedListData[];
 }
