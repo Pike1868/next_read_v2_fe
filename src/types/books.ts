@@ -38,6 +38,21 @@ export interface BookDetailsResponse {
 
 
 
+
+export interface BookDetailsResponse {
+  title?: string;
+  authors?: string[];
+  imageLinks?: { thumbnail?: string };
+  publishedDate?: string;
+  pageCount?: number;
+  categories?: string[];
+  description?: string;
+  publisher?: string;
+}
+
+
+
+
 export interface SearchResults {
   books: Book[];
   query: string;

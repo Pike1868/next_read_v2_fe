@@ -173,14 +173,13 @@ class ServerApi {
         return response;
     }
 
-    //method to fetch featured books lists
+   //method to fetch featured books lists
     public async getFeaturedLists(): Promise<ApiResponse<FeaturedListsResponse>> {
         return this.request<Record<string, never>, FeaturedListsResponse>({
             endpoint: 'api/books/featured',
             method: 'get',
         });
     }
-
 
 
 
