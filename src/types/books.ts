@@ -11,6 +11,16 @@ export interface Book {
   description: string;
   publisher: string;
 }
+// src/types/api.ts
+export interface FeaturedBook {
+  google_books_id: string;
+  title: string;
+  author: string;
+  description?: string | undefined;
+  book_image?: string;
+  rank?: number;
+  google_thumbnail_url?: string;
+}
 
 
 
