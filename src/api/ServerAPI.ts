@@ -3,6 +3,7 @@ import {
     BookDetailsApiResponse,
     EditUserRequest,
     EditUserResponse,
+    FeaturedListsResponse,
     RequestMethod,
     SearchByGenreRequest,
     SearchRequest,
@@ -124,10 +125,11 @@ class ServerApi {
     public async searchBooks(query: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchRequest, SearchResults>({
             endpoint: 'api/books/search',
-            data: { query, startIndex },
+            data: { query, startIndex },  // Use `params` instead of `data`
             method: "get"
         });
     }
+    
 
     public async searchBooksByGenre(genre: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchByGenreRequest, SearchResults>({
@@ -169,6 +171,14 @@ class ServerApi {
 
         console.log("Fetched User Books Response:", response);
         return response;
+    }
+
+    //method to fetch featured books lists
+    public async getFeaturedLists(): Promise<ApiResponse<FeaturedListsResponse>> {
+        return this.request<Record<string, never>, FeaturedListsResponse>({
+            endpoint: 'api/books/featured',
+            method: 'get',
+        });
     }
 
 
