@@ -101,6 +101,9 @@ export interface ApiBook {
     publisher: string;
     average_rating?: number | null;
     ratings_count?: number;
+}
+
+
 export interface FeaturedBook {
     google_books_id: string;
     title: string;
