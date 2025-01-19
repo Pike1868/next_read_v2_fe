@@ -1,15 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FeaturedBook } from "@/types/api";
+import { useNavigate } from "react-router-dom";
 
 interface FeaturedBookCardProps {
     book: FeaturedBook;
-    onClick: () => void;
 }
 
-export default function FeaturedBookCard({
-    book,
-    onClick,
-}: FeaturedBookCardProps) {
+export default function FeaturedBookCard({ book }: FeaturedBookCardProps) {
+    const navigate = useNavigate();
+
+    const handleCardClick = () => {
+        navigate(`/book/${book.google_books_id}`);
+    };
+
     const imgSrc =
         book.thumbnail_url ||
         book.book_image ||
@@ -19,7 +22,7 @@ export default function FeaturedBookCard({
     return (
         <Card
             className="w-40 overflow-hidden cursor-pointer sm:w-48 md:w-56 lg:w-64 shrink-0"
-            onClick={onClick}
+            onClick={handleCardClick}
         >
             <CardHeader className="p-2">
                 <CardTitle className="text-sm line-clamp-2">

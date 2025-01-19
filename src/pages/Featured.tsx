@@ -1,6 +1,5 @@
 import ServerApi from "@/api/ServerAPI";
 import FeaturedBookCard from "@/components/books/FeaturedBookCard";
-import { Button } from "@/components/ui/button";
 import { FeaturedBook, FeaturedListsResponse } from "@/types/api";
 import { useEffect, useState } from "react";
 
@@ -65,17 +64,9 @@ export default function Featured() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
             <h1 className="text-4xl font-bold">Featured</h1>
-            <p className="mt-4 text-lg">Find Your Next Read By Genre</p>
-
-            {/* Button to manually fetch if you prefer */}
-            <Button
-                onClick={fetchFeaturedLists}
-                variant="outline"
-                className="mt-4 text-green-800"
-            >
-                Fetch and log featured lists
-            </Button>
-
+            <p className="mt-4 text-lg">
+                Find Your Next Read From New York Times Featured Lists
+            </p>
             {/* Render featured lists */}
             {featuredData && (
                 <div className="w-full px-4 mt-6 space-y-6">
@@ -92,12 +83,6 @@ export default function Featured() {
                                     <FeaturedBookCard
                                         key={book.google_books_id}
                                         book={book}
-                                        onClick={() =>
-                                            console.log(
-                                                "Book card clicked:",
-                                                book
-                                            )
-                                        }
                                     />
                                 ))}
                             </div>

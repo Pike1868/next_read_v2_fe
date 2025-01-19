@@ -17,6 +17,7 @@ import {
     UserProfileResponse
 } from '@/types/api';
 import axios, { AxiosResponse } from 'axios';
+import * as Sentry from "@sentry/react";
 
 const BASE_URL = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:5000';
 
@@ -73,6 +74,7 @@ class ServerApi {
             } as ApiResponse<R>;
 
         } catch (err: unknown) {
+            Sentry.captureException(err); 
             if (axios.isAxiosError(err)) {
                 console.error("API Error:", err.response || err);
                 const message = err.response?.data?.msg || 'An error occurred';

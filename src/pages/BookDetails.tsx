@@ -8,19 +8,21 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { clearBookDetails, setBookDetails,saveBookToServer } from "@/features/book/bookSlice";
+import {
+    clearBookDetails,
+    saveBookToServer,
+    setBookDetails,
+} from "@/features/book/bookSlice";
 import { RootState } from "@/store/rootReducer";
 import { AppDispatch } from "@/store/store";
 import { Book, BookDetailsResponse } from "@/types/books";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { BookStatuses } from "@/constants/bookStatuses"; // Import status constants
 
 const DEFAULT_IMAGE = "/bookcover-na.jpg";
 
 console.log("saveBookToServer:", saveBookToServer); // Should log a function
-
 
 export default function BookDetails() {
     const user = useSelector((state: RootState) => state.user.user); // Get the user from Redux state
@@ -72,33 +74,43 @@ export default function BookDetails() {
     }
 
     // Function to handle saving the book status
-    async function saveBookStatus(status: string) {
-        if (!book) return;
-        try {
-            // Map human-readable status to underscored status
-            let mappedStatus: string;
-            switch (status) {
-                case "Previously Read":
-                    mappedStatus = BookStatuses.PREVIOUSLY_READ;
-                    break;
-                case "Currently Reading":
-                    mappedStatus = BookStatuses.CURRENTLY_READING;
-                    break;
-                case "Want To Read":
-                    mappedStatus = BookStatuses.WANT_TO_READ;
-                    break;
-                default:
-                    console.error("Unknown status:", status);
-                    return;
-            }
-            console.log("Mapped Status:", mappedStatus); // Verify mapping
-            // Dispatch the thunk with the mapped status
-            await dispatch(saveBookToServer({
-                google_books_id: book.google_books_id,
-                status: mappedStatus,
-            }));
 
-            console.log("Dispatched saveBookToServer");// Confirm dispatch
+    async function saveBookStatus(status: string) {
+        if (!book) {
+            return (
+                <div className="mt-10 text-center">
+                    <h2 className="text-xl font-semibold">Book not found</h2>
+                    <p className="text-gray-600">
+                        The book details you're looking for are not available.
+                        Please try a different book.
+                    </p>
+                </div>
+            );
+        }
+
+        // Map human-readable status to the corresponding BookStatus enum value
+        const statusMap: Record<string, BookStatus> = {
+            "Previously Read": BookStatuses.PREVIOUSLY_READ,
+            "Currently Reading": BookStatuses.CURRENTLY_READING,
+            "Want To Read": BookStatuses.WANT_TO_READ,
+        };
+
+        const mappedStatus = statusMap[status];
+        if (!mappedStatus) {
+            console.error("Unknown status:", status);
+            return;
+        }
+
+        try {
+            // Dispatch the thunk with the mapped status
+            await dispatch(
+                saveBookToServer({
+                    google_books_id: book.google_books_id,
+                    status: mappedStatus,
+                })
+            );
+
+            console.log("Dispatched saveBookToServer"); // Confirm dispatch
 
             toast({
                 description: `Book status saved as: ${status}`,
