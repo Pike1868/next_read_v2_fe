@@ -4,7 +4,6 @@ import {
     EditUserRequest,
     EditUserResponse,
     FeaturedListsResponse,
-    FeaturedListsResponse,
     RequestMethod,
     SearchByGenreRequest,
     SearchRequest,
@@ -128,7 +127,6 @@ class ServerApi {
     public async searchBooks(query: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchRequest, SearchResults>({
             endpoint: 'api/books/search',
-            data: { query, startIndex },  // Use `params` instead of `data`
             data: { query, startIndex },  // Use `params` instead of `data`
             method: "get"
         });

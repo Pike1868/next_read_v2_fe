@@ -7,11 +7,17 @@ import { Book } from "@/types/books";
 import { BookStatuses, BookStatus } from "@/constants/bookStatuses"; // Import constants
 
 // Convert an ApiBook to your local Book model, adding status
+// Convert an ApiBook to your local Book model, adding status
 const toBook = (apiBook: ApiBook, status: BookStatus): Book & { status: BookStatus } => {
+  console.log("ApiBook received:", apiBook);
+
   return {
     google_books_id: apiBook.google_books_id,
     title: apiBook.title || "Unknown Title",
-    authors: apiBook.authors || ["Unknown Author"],
+    // Normalize authors to always be a flat array of strings
+    authors: Array.isArray(apiBook.authors)
+      ? apiBook.authors.flat() // Ensure it's a flat array
+      : [apiBook.authors || "Unknown Author"],
     thumbnail_url: apiBook.thumbnail_url || "/bookcover-na.jpg",
     published_date: apiBook.published_date || "",
     page_count: apiBook.page_count || 0,
@@ -23,6 +29,9 @@ const toBook = (apiBook: ApiBook, status: BookStatus): Book & { status: BookStat
     status,
   };
 };
+
+
+
 
 // --------------------- Thunks ---------------------
 

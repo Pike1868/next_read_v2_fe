@@ -89,7 +89,6 @@ export interface UserBooksResponse {
     previously_read: ApiBook[];
 }
 
-
 export interface ApiBook {
     google_books_id: string;
     title: string;
@@ -101,8 +100,10 @@ export interface ApiBook {
     publisher: string;
     average_rating?: number | null;
     ratings_count?: number;
-}
-
+    retail_price?: number; 
+    categories?: string[]; 
+    currency_code?: string;
+  }
 
 export interface FeaturedBook {
     google_books_id: string;

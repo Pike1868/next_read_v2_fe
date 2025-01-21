@@ -15,7 +15,12 @@ import {
 } from "@/features/book/bookSlice";
 import { RootState } from "@/store/rootReducer";
 import { AppDispatch } from "@/store/store";
-import { Book, BookDetailsResponse } from "@/types/books";
+import {
+    Book,
+    BookDetailsResponse,
+    BookStatus,
+    BookStatuses,
+} from "@/types/books";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -47,29 +52,31 @@ export default function BookDetails() {
             const response = await ServerApi.getBookDetails(volumeId);
             const bookData: BookDetailsResponse = response.data.book;
 
+            // Ensure authors is always an array
+            const authors = Array.isArray(bookData.authors)
+                ? bookData.authors
+                : [bookData.authors || "Unknown Author"];
+
+            console.log("Normalized authors:", authors, Array.isArray(authors));
+
             // Transform BookDetailsResponse to Book
             const book: Book = {
                 google_books_id: volumeId,
                 title: bookData.title || "Unknown Title",
-                authors: bookData.authors || ["Unknown Author"],
+                authors, // Already normalized as an array
                 thumbnail_url: bookData.imageLinks?.thumbnail || DEFAULT_IMAGE,
                 published_date: bookData.publishedDate || "",
                 page_count: bookData.pageCount || 0,
                 categories: bookData.categories || [],
-                retail_price: 0, // If unavailable, set a default
-                currency_code: "USD", // Default to USD
+                retail_price: 0, // Default value
+                currency_code: "USD", // Default value
                 description:
                     bookData.description || "Description not available",
                 publisher: bookData.publisher || "Publisher not available",
             };
-
             dispatch(setBookDetails(book));
         } catch (error) {
-            console.error("Failed to load book details:", error);
-            toast({
-                description: "Failed to load book details. Please try again.",
-                variant: "destructive",
-            });
+            console.error("Error loading book details:", error);
         }
     }
 

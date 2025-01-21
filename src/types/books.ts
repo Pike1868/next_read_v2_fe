@@ -22,8 +22,6 @@ export interface FeaturedBook {
   google_thumbnail_url?: string;
 }
 
-
-
 export interface BookDetailsResponse {
   title?: string;
   authors?: string[];
@@ -35,8 +33,14 @@ export interface BookDetailsResponse {
   publisher?: string;
 }
 
+// src/types/books.ts or src/types/api.ts
+export type BookStatus = "previously_read" | "currently_reading" | "want_to_read";
 
-
+export const BookStatuses = {
+  PREVIOUSLY_READ: "PREVIOUSLY_READ" as BookStatus,
+  CURRENTLY_READING: "CURRENTLY_READING" as BookStatus,
+  WANT_TO_READ: "WANT_TO_READ" as BookStatus,
+};
 
 export interface SearchResults {
   books: Book[];

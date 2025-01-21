@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface FeaturedBookCardProps {
     book: FeaturedBook;
+    onClick?: () => void;
 }
 
 export default function FeaturedBookCard({ book }: FeaturedBookCardProps) {

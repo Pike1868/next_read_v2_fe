@@ -1,12 +1,14 @@
 import ServerApi from "@/api/ServerAPI";
 import FeaturedBookCard from "@/components/books/FeaturedBookCard";
+import ListSkeleton from "@/components/skeletons/ListSkeleton"; // Import the skeleton
 import { Button } from "@/components/ui/button";
-import { FeaturedBook, FeaturedListsResponse } from "@/types/api";
+import { FeaturedListsResponse } from "@/types/api";
 import { useEffect, useState } from "react";
 
 export default function Featured() {
     const [featuredData, setFeaturedData] =
         useState<FeaturedListsResponse | null>(null);
+    const [isLoading, setIsLoading] = useState(true); // Track loading state
 
     // Fetch data on mount
     useEffect(() => {
@@ -15,96 +17,72 @@ export default function Featured() {
 
     // Function to fetch featured lists
     async function fetchFeaturedLists() {
+        setIsLoading(true); // Set loading state to true
         try {
             const resp = await ServerApi.getFeaturedLists();
-            console.log("API Response:", resp.data);
-
-            // Log the image URLs for debugging
-            resp.data.featured_lists.forEach((list) => {
-                list.books.forEach((book) => {
-                    console.log("Book Image:", book.book_image);
-                    console.log("Google Thumbnail:", book.google_thumbnail_url);
-                });
-            });
-
-            const uniqueBooks = deduplicateBooks(resp.data.featured_lists);
-            console.log(uniqueBooks);
-            setFeaturedData({ ...resp.data, featured_lists: uniqueBooks });
+            setFeaturedData(resp.data);
         } catch (error) {
             console.error("Error fetching featured lists:", error);
+        } finally {
+            setIsLoading(false); // Set loading state to false after fetching
         }
-    }
-
-    // Deduplication function
-    function deduplicateBooks(lists: FeaturedListsResponse["featured_lists"]) {
-        const bookMap = new Map<string, FeaturedBook>();
-
-        lists.forEach((list) => {
-            list.books.forEach((book) => {
-                // Use a combination of title and author as the key for deduplication
-                const uniqueKey = `${book.title.toLowerCase()}_${book.author.toLowerCase()}`;
-
-                // Only add to the map if the key doesn't exist
-                if (!bookMap.has(uniqueKey)) {
-                    bookMap.set(uniqueKey, book);
-                }
-            });
-        });
-
-        // Convert map back to array of lists
-        return lists.map((list) => ({
-            ...list,
-            books: list.books.filter((book) => {
-                const uniqueKey = `${book.title.toLowerCase()}_${book.author.toLowerCase()}`;
-                return bookMap.has(uniqueKey);
-            }),
-        }));
     }
 
     // Render the featured lists
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
+            {/* Header Section */}
             <h1 className="text-4xl font-bold">Featured</h1>
             <p className="mt-4 text-lg">Find Your Next Read By Genre</p>
 
-            {/* Button to manually fetch if you prefer */}
             <Button
                 onClick={fetchFeaturedLists}
                 variant="outline"
                 className="mt-4 text-green-800"
             >
-                Fetch and log featured lists
+                Refresh Lists
             </Button>
 
-            {/* Render featured lists */}
-            {featuredData && (
-                <div className="w-full px-4 mt-6 space-y-6">
-                    {featuredData.featured_lists.map((listObj) => (
+            {/* Featured Lists Section */}
+            <div className="w-full px-4 mt-6 space-y-6">
+                {isLoading && (
+                    <>
+                        {/* Render 3 skeletons uniformly */}
+                        {Array.from({ length: 3 }).map((_, idx) => (
+                            <ListSkeleton key={idx} itemCount={5} />
+                        ))}
+                    </>
+                )}
+
+                {!isLoading &&
+                    featuredData &&
+                    featuredData.featured_lists.map((listObj) => (
                         <div key={listObj.list_name} className="mb-4">
+                            {/* List Title */}
                             <h2 className="text-2xl font-semibold">
                                 {listObj.display_name}
                             </h2>
                             <hr className="my-2" />
 
-                            {/* Horizontal scroll area for the book cards */}
+                            {/* Books in the list */}
                             <div className="flex space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-400">
                                 {listObj.books.map((book) => (
                                     <FeaturedBookCard
                                         key={book.google_books_id}
                                         book={book}
-                                        onClick={() =>
-                                            console.log(
-                                                "Book card clicked:",
-                                                book
-                                            )
-                                        }
                                     />
                                 ))}
                             </div>
                         </div>
                     ))}
-                </div>
-            )}
+
+                {/* Fallback Message */}
+                {!isLoading && !featuredData && (
+                    <p className="text-gray-600 dark:text-gray-400">
+                        No featured lists available.
+                    </p>
+                )}
+            </div>
         </div>
     );
 }
