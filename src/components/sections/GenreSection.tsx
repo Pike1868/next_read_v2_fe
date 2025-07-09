@@ -1,4 +1,5 @@
 import ServerApi from "@/api/ServerAPI";
+import { Card, CardContent } from "@/components/ui/card";
 import {
     setQuery,
     setSearchResults,
@@ -7,7 +8,6 @@ import {
 } from "@/features/search/searchSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function GenresSection() {
     const TOP_GENRES = [
@@ -68,24 +68,27 @@ export default function GenresSection() {
     };
 
     return (
-        <section className="w-full px-6 py-20 bg-white">
-            <h2 className="mb-8 text-4xl font-bold text-center">
+        <section className="w-full px-4 sm:px-6 py-12 sm:py-20 bg-white">
+            <h2 className="mb-6 sm:mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-center">
                 Find Your Next Read By Genre
             </h2>
-            <div className="flex flex-wrap justify-center gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
                 {TOP_GENRES.map((genre, index) => (
                     <Card
                         key={index}
-                        className="w-full max-w-sm p-0 overflow-hidden transition-transform duration-200 transform rounded-lg shadow-md cursor-pointer hover:scale-105"
+                        className="overflow-hidden transition-transform duration-200 transform rounded-lg shadow-md cursor-pointer hover:scale-105 hover:shadow-lg flex flex-col"
                         onClick={() => handleGenreClick(genre.name)}
                     >
-                        <img
-                            src={genre.imgSrc}
-                            alt={genre.name}
-                            className="object-cover w-full h-48 rounded-t-lg"
-                        />
-                        <CardContent className="h-full p-4 text-center bg-white ">
-                            <h3 className="ml-4 text-xl font-semibold ">
+                        <div className="relative h-36 sm:h-40">
+                            <img
+                                src={genre.imgSrc}
+                                alt={genre.name}
+                                className="absolute inset-0 object-cover w-full h-full"
+                            />
+                            <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                        </div>
+                        <CardContent className="flex items-center justify-center p-4 text-center flex-1">
+                            <h3 className="text-lg sm:text-xl font-semibold">
                                 {genre.name}
                             </h3>
                         </CardContent>

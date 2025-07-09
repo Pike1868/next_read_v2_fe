@@ -1,4 +1,4 @@
-import { Book, BookDetailsResponse } from "./books";
+import { Book } from "./books";
 
 export type RequestMethod = "get" | "post" | "put" | "delete";
 
@@ -89,21 +89,28 @@ export interface UserBooksResponse {
     previously_read: ApiBook[];
 }
 
-export interface ApiBook {
+export interface ApiBook extends Book {
+
+}export interface BookDetailsResponse {
+    title?: string;
+    authors?: string[] | string;
+    imageLinks?: { thumbnail?: string };
+    thumbnail_url?: string;
+    publishedDate?: string;
+    pageCount?: number;
+    categories?: string[];
+    description?: string;
+    publisher?: string;
+}
+
+// You can also define an ApiBook that extends your internal Book if needed:
+export interface ApiBook extends Book { }
+
+// And when your backend returns details, its response shape can be:
+export interface BookDetailsApiResponse {
     google_books_id: string;
-    title: string;
-    authors: string[];
-    thumbnail_url: string;
-    published_date: string;
-    page_count: number;
-    description: string;
-    publisher: string;
-    average_rating?: number | null;
-    ratings_count?: number;
-    retail_price?: number; 
-    categories?: string[]; 
-    currency_code?: string;
-  }
+    book: BookDetailsResponse;
+}
 
 export interface FeaturedBook {
     google_books_id: string;

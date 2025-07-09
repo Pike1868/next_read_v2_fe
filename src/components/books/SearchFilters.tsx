@@ -1,5 +1,12 @@
-import FormSelect from "@/components/books/FormSelect";
-import Searchbar from "@/components/books/Searchbar";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { setSorting } from "@/features/search/searchSlice";
 import { RootState } from "@/store/rootReducer";
 import { BookFilterOptions } from "@/types/books";
@@ -13,28 +20,42 @@ export default function SearchFilters() {
         dispatch(setSorting(value));
     };
 
+    const handleClearFilters = () => {
+        dispatch(setSorting("none"));
+    };
+
     return (
-        <div className="flex flex-wrap items-center justify-center w-full p-4 mt-4 space-x-10 bg-[#14532D] border-2 border-[#212529] rounded-md border-opacity-20">
-            <div className="w-full md:w-auto">
-                <Searchbar />
-            </div>
-            <div className="flex items-center justify-start w-full md:w-auto">
-                <div className="flex-shrink-0 w-32 mb-4 md:w-48">
-                    <FormSelect
-                        label="Sort"
-                        name="sort"
-                        value={sorting}
-                        options={[
-                            "none",
-                            "a-z",
-                            "z-a",
-                            "author",
-                            "year",
-                            "page length",
-                            "categories",
-                        ]}
-                        onChange={handleSortChange}
-                    />
+        <div className="px-2 py-4 sm:p-4">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
+                <div className="flex-1">
+                    <Label htmlFor="sort">Sort By</Label>
+                    <Select value={sorting} onValueChange={handleSortChange}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Sort by..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="a-z">Title (A-Z)</SelectItem>
+                            <SelectItem value="z-a">Title (Z-A)</SelectItem>
+                            <SelectItem value="author">Author</SelectItem>
+                            <SelectItem value="year">
+                                Publication Year
+                            </SelectItem>
+                            <SelectItem value="page length">
+                                Page Count
+                            </SelectItem>
+                            <SelectItem value="categories">Category</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                <div className="flex justify-end">
+                    <Button
+                        variant="outline"
+                        onClick={handleClearFilters}
+                        className="w-full sm:w-auto"
+                    >
+                        Clear Filters
+                    </Button>
                 </div>
             </div>
         </div>

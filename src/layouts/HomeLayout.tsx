@@ -1,4 +1,4 @@
-import SavedBooksModal from "@/components/modals/SavedBooksModal"; // Import the modal component
+import SavedBooksModal from "@/components/modals/SavedBooksModal";
 import Footer from "@/components/sections/Footer";
 import Header from "@/components/sections/Header";
 import { useState } from "react";
@@ -8,22 +8,20 @@ const HomeLayout = () => {
     const navigation = useNavigation();
     const isPageLoading = navigation.state === "loading";
 
-    // State to manage modal visibility
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Function to toggle the modal visibility
-    const toggleModal = () => setModalOpen(!isModalOpen);
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
 
     return (
         <main className="relative flex flex-col min-h-screen">
-            <Header onOpenSavedBooks={toggleModal} />{" "}
-            {/* Pass toggle function to Header */}
-            <div className="container flex-grow px-4 mx-auto">
+            <Header onOpenSavedBooks={toggleModal} />
+            <div className="container flex-grow px-4 mx-auto max-w-full md:max-w-[90%] lg:max-w-[1200px]">
                 {isPageLoading ? <p>Loading...</p> : <Outlet />}
             </div>
             <Footer />
-            {/* Conditionally render the modal */}
-            {isModalOpen && <SavedBooksModal onClose={toggleModal} />}
+            <SavedBooksModal isOpen={isModalOpen} onClose={toggleModal} />
         </main>
     );
 };

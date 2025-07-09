@@ -1,8 +1,8 @@
 export interface Book {
   google_books_id: string;
   title: string;
-  authors: string[];
-  thumbnail_url: string;
+  authors: string[]; // Always a flat array of strings
+  thumbnail_url: string; // Direct URL to the image
   published_date: string;
   page_count: number;
   categories: string[];
@@ -11,7 +11,7 @@ export interface Book {
   description: string;
   publisher: string;
 }
-// src/types/api.ts
+
 export interface FeaturedBook {
   google_books_id: string;
   title: string;
@@ -24,15 +24,18 @@ export interface FeaturedBook {
 
 export interface BookDetailsResponse {
   title?: string;
-  authors?: string[];
+  // It might come as a string or an array.
+  authors?: string[] | string;
+  // Google Books returns imageLinks; but your NYT data might already be normalized.
   imageLinks?: { thumbnail?: string };
+  // If your backend already normalized it, you may have a direct property:
+  thumbnail_url?: string;
   publishedDate?: string;
   pageCount?: number;
   categories?: string[];
   description?: string;
   publisher?: string;
 }
-
 // src/types/books.ts or src/types/api.ts
 export type BookStatus = "previously_read" | "currently_reading" | "want_to_read";
 

@@ -1,7 +1,7 @@
+import { Card, CardContent } from "@/components/ui/card";
 import { BsBookmarkStarFill } from "react-icons/bs";
 import { FaBookReader } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function FeaturesSection() {
     const features = [
@@ -29,27 +29,29 @@ export default function FeaturesSection() {
     ];
 
     return (
-        <section className="w-full px-6 py-20 bg-white">
-            <h2 className="mb-8 text-4xl font-bold text-center">Features</h2>
-            <div className="flex flex-wrap justify-center gap-8">
+        <section className="w-full px-4 sm:px-6 py-12 sm:py-20 bg-white">
+            <h2 className="mb-6 sm:mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-center">
+                Features
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
                 {features.map((feature, index) => (
                     <Card
                         key={index}
-                        className="w-full max-w-sm p-0 overflow-hidden transition-transform duration-200 transform rounded-lg shadow-md hover:scale-105"
+                        className="w-full p-0 overflow-hidden transition-transform duration-200 transform rounded-lg shadow-md hover:scale-105"
                     >
                         <img
                             src={feature.imgSrc}
                             alt={feature.title}
-                            className="object-cover w-full h-48 rounded-t-lg"
+                            className="object-cover w-full h-40 sm:h-48 rounded-t-lg"
                         />
-                        <CardContent className="h-full p-4 text-center bg-[#14532D] ">
-                            <div className="flex justify-center mb-4">
+                        <CardContent className="h-full p-4 text-center bg-[#14532D]">
+                            <div className="flex flex-col sm:flex-row items-center justify-center mb-3 sm:mb-4">
                                 {feature.icon}
-                                <h3 className="ml-4 text-xl font-semibold text-white">
+                                <h3 className="mt-2 sm:mt-0 sm:ml-4 text-lg sm:text-xl font-semibold text-white">
                                     {feature.title}
                                 </h3>
                             </div>
-                            <p className="text-white">
+                            <p className="text-sm sm:text-base text-white">
                                 {feature.description}
                             </p>
                         </CardContent>

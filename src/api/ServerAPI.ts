@@ -16,8 +16,9 @@ import {
     UserProfileRequest,
     UserProfileResponse
 } from '@/types/api';
-import axios, { AxiosResponse } from 'axios';
 import * as Sentry from "@sentry/react";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+
 
 const BASE_URL = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:5000';
 
@@ -56,35 +57,40 @@ class ServerApi {
         endpoint: string;
         data?: T;
         method?: RequestMethod;
-    }): Promise<ApiResponse<R>> { // Return type is a Promise that resolves to ApiResponse<R>
-        console.log("API Call:", endpoint, data, method, this.token);
-
+    }): Promise<ApiResponse<R>> {
         const url = `${BASE_URL}/${endpoint}`;
         const headers = this.token ? { Authorization: `Bearer ${this.token}` } : {};
-        const params = method === "get" ? data : {};
+
+        const axiosConfig: AxiosRequestConfig = {
+            url,
+            method,
+            headers,
+        };
+
+
+        if (method === "get" && data) {
+            axiosConfig.params = data;
+        } else if (data) {
+            axiosConfig.data = data;
+        }
 
         try {
-            const response: AxiosResponse<R> = await axios({ url, method, data, params, headers });
-            // Wrap the response to conform to custom ApiResponse type
-
-            console.log("+++++++++++", response)
+            const response: AxiosResponse<R> = await axios(axiosConfig);
             return {
                 data: response.data,
                 status: response.status,
             } as ApiResponse<R>;
-
         } catch (err: unknown) {
-            Sentry.captureException(err); 
+            Sentry.captureException(err);
             if (axios.isAxiosError(err)) {
-                console.error("API Error:", err.response || err);
                 const message = err.response?.data?.msg || 'An error occurred';
                 throw new Error(message);
             } else {
-                console.error("Unexpected error:", err);
                 throw new Error('An unexpected error occurred');
             }
         }
     }
+
 
     public async signup(data: SignupRequest): Promise<ApiResponse<SignupResponse>> {
         return this.request<SignupRequest, SignupResponse>({
@@ -131,8 +137,8 @@ class ServerApi {
             method: "get"
         });
     }
-    
-    
+
+
 
     public async searchBooksByGenre(genre: string, startIndex: number = 0): Promise<ApiResponse<SearchResults>> {
         return this.request<SearchByGenreRequest, SearchResults>({
@@ -176,7 +182,7 @@ class ServerApi {
         return response;
     }
 
-   //method to fetch featured books lists
+    //method to fetch featured books lists
     public async getFeaturedLists(): Promise<ApiResponse<FeaturedListsResponse>> {
         return this.request<Record<string, never>, FeaturedListsResponse>({
             endpoint: 'api/books/featured',

@@ -1,3 +1,4 @@
+import ServerApi from "@/api/ServerAPI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,16 +11,19 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import ServerApi from "@/api/ServerAPI";
 
 export default function Searchbar() {
     const [query, setQueryLocal] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // Function to handle the search action
     const handleSearch = async () => {
+        if (!query.trim() || isSearching) return;
+
         console.log("handleSearch called with query:", query);
+        setIsSearching(true);
 
         // Update Redux store with new search query, reset start index, and set default sorting
         dispatch(setQuery(query));
@@ -38,6 +42,8 @@ export default function Searchbar() {
             navigate("/book/search");
         } catch (error) {
             console.error("Error searching books, ", error);
+        } finally {
+            setIsSearching(false);
         }
     };
 
@@ -49,21 +55,27 @@ export default function Searchbar() {
     };
 
     return (
-        <div className="flex py-4">
-            <div className="flex max-h-20">
+        <div className="flex w-full max-w-full">
+            <div className="flex w-full">
                 <Input
-                    className="p-2 px-4 py-2 text-black rounded-l-full "
-                    placeholder="Search for books here..."
+                    className="p-2 px-4 py-2 text-black rounded-l-md sm:rounded-l-full flex-1 min-w-0"
+                    placeholder="Search for books..."
                     value={query}
                     onChange={(e) => setQueryLocal(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    disabled={isSearching}
                 />
                 <Button
-                    className="flex items-center px-4 py-2 text-white bg-green-800 rounded-r-full hover:bg-green-500"
+                    className="flex items-center px-3 sm:px-4 py-2 text-white bg-green-800 rounded-r-md sm:rounded-r-full hover:bg-green-700 disabled:bg-green-600"
                     onClick={handleSearch}
+                    disabled={isSearching || !query.trim()}
                 >
-                    <FaSearch className="mr-2" />
-                    Search
+                    {isSearching ? (
+                        <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    ) : (
+                        <FaSearch className="mr-2" />
+                    )}
+                    <span className="hidden sm:inline">Search</span>
                 </Button>
             </div>
         </div>
