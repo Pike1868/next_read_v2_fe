@@ -9,6 +9,7 @@ import HomePage from "@/pages/Home";
 import MyBooks from "@/pages/MyBooks";
 import Profile from "@/pages/Profile";
 import Quiz from "@/pages/Quiz";
+import QuizResults from "@/pages/QuizResults";
 import Search from "@/pages/Search";
 import Signin from "@/pages/Signin";
 import Signup from "@/pages/Signup";
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
             {
                 path: "quiz-results",
                 element: <PrivateRoute />,
-                children: [{ path: "", element: <div>Quiz Results Coming Soon</div> }],
+                children: [{ path: "", element: <QuizResults /> }],
             },
             {
                 path: "user/profile",
