@@ -16,32 +16,32 @@ export default function UserProfile({
         month: "long",
     });
     return (
-        <section className="container p-8 mx-auto">
-            <div className="flex items-center mb-6 space-x-4">
-                <Avatar className="w-16 h-16 rounded-full">
+        <section className="w-full p-4 md:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
+                <Avatar className="w-16 h-16 md:w-20 md:h-20 rounded-full mx-auto sm:mx-0">
                     <AvatarImage src={imageUrl} alt={username} />
                     <AvatarFallback>
-                        <FaUserAstronaut />
+                        <FaUserAstronaut className="w-8 h-8 md:w-10 md:h-10" />
                     </AvatarFallback>
                 </Avatar>
-                <div>
-                    <h2 className="text-2xl font-semibold">{username}</h2>
-                    <p className="text-gray-600">{email}</p>
+                <div className="text-center sm:text-left">
+                    <h2 className="text-xl md:text-2xl font-semibold">{username}</h2>
+                    <p className="text-gray-600 text-sm md:text-base">{email}</p>
                 </div>
             </div>
 
             <Card className="mb-6">
                 <CardHeader>
-                    <CardTitle>Profile Information</CardTitle>
+                    <CardTitle className="text-lg md:text-xl">Profile Information</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    <p>
+                <CardContent className="space-y-3">
+                    <p className="text-sm md:text-base">
                         <strong>Bio:</strong> {bio || "None"}
                     </p>
-                    <p>
+                    <p className="text-sm md:text-base">
                         <strong>Location:</strong> {location || "None"}
                     </p>
-                    <p>
+                    <p className="text-sm md:text-base">
                         <strong>Member Since:</strong> {formattedDate}
                     </p>
                 </CardContent>

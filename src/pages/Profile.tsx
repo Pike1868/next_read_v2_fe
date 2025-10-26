@@ -55,32 +55,40 @@ export default function Profile() {
 
     if (!userProfile) {
         return (
-            <div>
-                Loading...something is wrong with state saved user profile info
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="text-center">
+                    <p className="text-lg text-gray-600">Loading...</p>
+                    <p className="text-sm text-gray-500 mt-2">Loading profile information</p>
+                </div>
             </div>
         );
     }
 
     return (
         <>
-            <div className="mb-24">
+            <div className="w-full max-w-4xl mx-auto mb-16 md:mb-24">
                 {!isEditing ? (
                     <div>
                         <UserProfile {...userProfile} />
-                        <div className="flex space-x-4">
-                            <Button variant="outline" onClick={handleEditClick}>
+                        <div className="flex flex-col sm:flex-row gap-4 px-4 md:px-8">
+                            <Button 
+                                variant="outline" 
+                                onClick={handleEditClick}
+                                className="w-full sm:w-auto"
+                            >
                                 Edit Profile
                             </Button>
                             <Button
                                 variant="destructive"
                                 onClick={handleDeleteClick}
+                                className="w-full sm:w-auto"
                             >
                                 Delete Profile
                             </Button>
                         </div>
                     </div>
                 ) : (
-                    <div className="modal">
+                    <div className="w-full">
                         <EditProfileForm
                             {...userProfile}
                             closeModal={handleCloseModal}

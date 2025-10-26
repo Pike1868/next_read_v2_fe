@@ -18,8 +18,14 @@ const HomeLayout = () => {
         <main className="relative flex flex-col min-h-screen">
             <Header onOpenSavedBooks={toggleModal} />{" "}
             {/* Pass toggle function to Header */}
-            <div className="container flex-grow px-4 mx-auto">
-                {isPageLoading ? <p>Loading...</p> : <Outlet />}
+            <div className="container flex-grow px-4 md:px-6 lg:px-8 py-4 md:py-6 mx-auto">
+                {isPageLoading ? (
+                    <div className="flex items-center justify-center min-h-[400px]">
+                        <p className="text-lg text-gray-600">Loading...</p>
+                    </div>
+                ) : (
+                    <Outlet />
+                )}
             </div>
             <Footer />
             {/* Conditionally render the modal */}

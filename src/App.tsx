@@ -6,6 +6,7 @@ import Contact from "@/pages/Contact";
 import ErrorPage from "@/pages/Error";
 import Featured from "@/pages/Featured";
 import HomePage from "@/pages/Home";
+import MyBooks from "@/pages/MyBooks";
 import Profile from "@/pages/Profile";
 import Search from "@/pages/Search";
 import Signin from "@/pages/Signin";
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
                 path: "user/profile",
                 element: <PrivateRoute />,
                 children: [{ path: "", element: <Profile /> }],
+            },
+            {
+                path: "user/library",
+                element: <PrivateRoute />,
+                children: [{ path: "", element: <MyBooks /> }],
             },
             { path: "book/:volume_id", element: <BookDetails /> },
         ],

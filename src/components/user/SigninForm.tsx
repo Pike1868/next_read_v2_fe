@@ -1,6 +1,7 @@
 import ServerApi from "@/api/ServerAPI";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Form } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import { setSavedBooks } from "@/features/book/bookSlice";
@@ -12,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import FormInput from "./FormInput";
+import GoogleSignInButton from "./GoogleSignInButton";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address." }),
@@ -68,13 +70,24 @@ export default function SigninForm() {
             <Card className="w-96 bg-muted">
                 <CardHeader>
                     <CardTitle className="text-center">Welcome Back!</CardTitle>
-                    <p className="text-center">Sign in below</p>
+                    <p className="text-center text-sm text-gray-600">Sign in below</p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-6">
+                    {/* Google Sign In */}
+                    <GoogleSignInButton variant="default" fullWidth showText />
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-4">
+                        <Separator className="flex-1" />
+                        <span className="text-xs text-gray-500 font-medium">OR</span>
+                        <Separator className="flex-1" />
+                    </div>
+
+                    {/* Email/Password Form */}
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(handleSubmit)}
-                            className="space-y-8"
+                            className="space-y-4"
                         >
                             <FormInput<FormData>
                                 control={form.control}
@@ -88,7 +101,7 @@ export default function SigninForm() {
                             />
                             <Button
                                 type="submit"
-                                className="w-full text-xl font-bold bg-green-800 hover:text-green-800 hover:bg-white"
+                                className="w-full text-xl font-bold bg-green-800 hover:text-green-800 hover:bg-white transition-all"
                             >
                                 Sign In
                             </Button>

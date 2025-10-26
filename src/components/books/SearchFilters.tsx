@@ -14,27 +14,32 @@ export default function SearchFilters() {
     };
 
     return (
-        <div className="flex flex-wrap items-center justify-center w-full p-4 mt-4 space-x-10 bg-[#14532D] border-2 border-[#212529] rounded-md border-opacity-20">
-            <div className="w-full md:w-auto">
-                <Searchbar />
-            </div>
-            <div className="flex items-center justify-start w-full md:w-auto">
-                <div className="flex-shrink-0 w-32 mb-4 md:w-48">
-                    <FormSelect
-                        label="Sort"
-                        name="sort"
-                        value={sorting}
-                        options={[
-                            "none",
-                            "a-z",
-                            "z-a",
-                            "author",
-                            "year",
-                            "page length",
-                            "categories",
-                        ]}
-                        onChange={handleSortChange}
-                    />
+        <div className="w-full mt-6 md:mt-8">
+            <div className="bg-gradient-to-r from-[#14532D] to-[#1a6b3f] border border-green-700 rounded-lg p-4 md:p-6 shadow-md">
+                <div className="space-y-4 md:space-y-0 md:flex md:items-end md:gap-6">
+                    <div className="flex-1 min-w-0">
+                        <label className="block text-sm font-semibold text-white mb-2">
+                            Find Your Next Read
+                        </label>
+                        <Searchbar />
+                    </div>
+                    <div className="w-full md:w-48 flex-shrink-0">
+                        <FormSelect
+                            label="Sort By"
+                            name="sort"
+                            value={sorting}
+                            options={[
+                                "none",
+                                "a-z",
+                                "z-a",
+                                "author",
+                                "year",
+                                "page length",
+                                "categories",
+                            ]}
+                            onChange={handleSortChange}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

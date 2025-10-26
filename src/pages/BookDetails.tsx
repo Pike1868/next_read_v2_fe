@@ -8,7 +8,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { clearBookDetails, setBookDetails,saveBookToServer } from "@/features/book/bookSlice";
+import { clearBookDetails, setBookDetails, saveBookToServer, fetchUserBooks } from "@/features/book/bookSlice";
 import { RootState } from "@/store/rootReducer";
 import { AppDispatch } from "@/store/store";
 import { Book, BookDetailsResponse } from "@/types/books";
@@ -97,6 +97,9 @@ export default function BookDetails() {
                 google_books_id: book.google_books_id,
                 status: mappedStatus,
             }));
+            
+            // Refetch user books to sync library with latest changes
+            await dispatch(fetchUserBooks());
 
             console.log("Dispatched saveBookToServer");// Confirm dispatch
 
