@@ -8,6 +8,7 @@ import Featured from "@/pages/Featured";
 import HomePage from "@/pages/Home";
 import MyBooks from "@/pages/MyBooks";
 import Profile from "@/pages/Profile";
+import Quiz from "@/pages/Quiz";
 import Search from "@/pages/Search";
 import Signin from "@/pages/Signin";
 import Signup from "@/pages/Signup";
@@ -26,6 +27,16 @@ const router = createBrowserRouter([
             { path: "book/search", element: <Search /> },
             { path: "user/sign-up", element: <Signup /> },
             { path: "user/sign-in", element: <Signin /> },
+            {
+                path: "quiz",
+                element: <PrivateRoute />,
+                children: [{ path: "", element: <Quiz /> }],
+            },
+            {
+                path: "quiz-results",
+                element: <PrivateRoute />,
+                children: [{ path: "", element: <div>Quiz Results Coming Soon</div> }],
+            },
             {
                 path: "user/profile",
                 element: <PrivateRoute />,
