@@ -126,3 +126,62 @@ export interface FeaturedListsResponse {
     published_date?: string;       // might be optional
     featured_lists: FeaturedListData[];
 }
+
+// Quiz Types
+export interface QuizQuestion {
+    id: number;
+    question: string;
+    answers: {
+        id: string;
+        text: string;
+    }[];
+}
+
+export interface QuizQuestionsResponse {
+    questions: QuizQuestion[];
+    total: number;
+}
+
+export interface QuizAnswer {
+    question: number;
+    answer: string;
+}
+
+export interface QuizSubmitRequest extends Record<string, unknown> {
+    answers: QuizAnswer[];
+}
+
+export interface QuizResultResponse {
+    persona: string;
+    description: string;
+    genres: string[];
+    scores: Record<string, number>;
+    created_at?: string;
+}
+
+export interface QuizUserResultResponse {
+    id: number;
+    user_id: number;
+    persona: string;
+    description: string;
+    genres: string[];
+    scores: Record<string, number>;
+    created_at: string;
+    updated_at: string;
+}
+
+// Recommendation Types
+export interface RecommendationBook extends ApiBook {
+    score: number;
+    reasons: string[];
+}
+
+export interface RecommendationsResponse {
+    recommendations: RecommendationBook[];
+    total: number;
+}
+
+export interface SimilarBooksResponse {
+    similar_books: RecommendationBook[];
+    total: number;
+}

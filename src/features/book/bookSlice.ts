@@ -27,6 +27,25 @@ const toBook = (apiBook: ApiBook, status: BookStatus): Book & { status: BookStat
 // --------------------- Thunks ---------------------
 
 /**
+ * Thunk: Fetch user's saved books from the server.
+ */
+export const fetchUserBooks = createAsyncThunk(
+  "book/fetchUserBooks",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await ServerApi.getUserBooks();
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Failed to fetch user books:", error.message);
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("An unknown error occurred while fetching user books");
+    }
+  }
+);
+
+/**
  * Thunk: Remove a book on the server, then update local state.
  */
 export const removeBookFromServer = createAsyncThunk(
@@ -168,6 +187,20 @@ const bookSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // Fetch User Books
+    builder.addCase(fetchUserBooks.fulfilled, (state, action) => {
+      const { currently_reading, want_to_read, previously_read } = action.payload;
+      state.savedBooks = {
+        currentlyReading: currently_reading.map((b) => toBook(b, BookStatuses.CURRENTLY_READING)),
+        wantToRead: want_to_read.map((b) => toBook(b, BookStatuses.WANT_TO_READ)),
+        previouslyRead: previously_read.map((b) => toBook(b, BookStatuses.PREVIOUSLY_READ)),
+      };
+    });
+
+    builder.addCase(fetchUserBooks.rejected, (state, action) => {
+      console.error("Failed to fetch user books:", action.payload);
+    });
+
     // Remove Book
     builder.addCase(removeBookFromServer.fulfilled, (state, action) => {
       const { google_books_id } = action.payload;

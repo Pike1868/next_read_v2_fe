@@ -4,6 +4,12 @@ import {
     EditUserRequest,
     EditUserResponse,
     FeaturedListsResponse,
+    QuizQuestionsResponse,
+    QuizSubmitRequest,
+    QuizResultResponse,
+    QuizUserResultResponse,
+    RecommendationsResponse,
+    SimilarBooksResponse,
     RequestMethod,
     SearchByGenreRequest,
     SearchRequest,
@@ -181,7 +187,59 @@ class ServerApi {
         });
     }
 
+    // Quiz API Methods
+    public async getQuizQuestions(): Promise<ApiResponse<QuizQuestionsResponse>> {
+        return this.request<Record<string, never>, QuizQuestionsResponse>({
+            endpoint: 'api/quiz/questions',
+            method: 'get',
+        });
+    }
 
+    public async submitQuizAnswers(data: QuizSubmitRequest): Promise<ApiResponse<QuizResultResponse>> {
+        return this.request<QuizSubmitRequest, QuizResultResponse>({
+            endpoint: 'api/quiz/submit',
+            data,
+            method: 'post',
+        });
+    }
+
+    public async getUserQuizResult(): Promise<ApiResponse<QuizUserResultResponse>> {
+        return this.request<Record<string, never>, QuizUserResultResponse>({
+            endpoint: 'api/quiz/user',
+            method: 'get',
+        });
+    }
+
+    public async retakeQuiz(): Promise<ApiResponse<{ message: string }>> {
+        return this.request<Record<string, never>, { message: string }>({
+            endpoint: 'api/quiz/retake',
+            method: 'post',
+        });
+    }
+
+    // Recommendation API Methods
+    public async getRecommendations(limit: number = 10): Promise<ApiResponse<RecommendationsResponse>> {
+        return this.request<{ limit: number }, RecommendationsResponse>({
+            endpoint: 'api/recommendations/user',
+            data: { limit },
+            method: 'get',
+        });
+    }
+
+    public async getSimilarBooks(bookId: string, limit: number = 6): Promise<ApiResponse<SimilarBooksResponse>> {
+        return this.request<{ limit: number }, SimilarBooksResponse>({
+            endpoint: `api/recommendations/book/${bookId}`,
+            data: { limit },
+            method: 'get',
+        });
+    }
+
+    public async regenerateRecommendations(): Promise<ApiResponse<{ message: string; total: number }>> {
+        return this.request<Record<string, never>, { message: string; total: number }>({
+            endpoint: 'api/recommendations/regenerate',
+            method: 'post',
+        });
+    }
 
 }
 

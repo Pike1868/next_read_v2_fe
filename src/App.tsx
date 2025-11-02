@@ -1,3 +1,4 @@
+import ErrorBoundary from "@/components/error/ErrorBoundary";
 import PrivateRoute from "@/components/user/PrivateRoute";
 import HomeLayout from "@/layouts/HomeLayout";
 import About from "@/pages/About";
@@ -6,7 +7,10 @@ import Contact from "@/pages/Contact";
 import ErrorPage from "@/pages/Error";
 import Featured from "@/pages/Featured";
 import HomePage from "@/pages/Home";
+import MyBooks from "@/pages/MyBooks";
 import Profile from "@/pages/Profile";
+import Quiz from "@/pages/Quiz";
+import QuizResults from "@/pages/QuizResults";
 import Search from "@/pages/Search";
 import Signin from "@/pages/Signin";
 import Signup from "@/pages/Signup";
@@ -26,9 +30,24 @@ const router = createBrowserRouter([
             { path: "user/sign-up", element: <Signup /> },
             { path: "user/sign-in", element: <Signin /> },
             {
+                path: "quiz",
+                element: <PrivateRoute />,
+                children: [{ path: "", element: <Quiz /> }],
+            },
+            {
+                path: "quiz-results",
+                element: <PrivateRoute />,
+                children: [{ path: "", element: <QuizResults /> }],
+            },
+            {
                 path: "user/profile",
                 element: <PrivateRoute />,
                 children: [{ path: "", element: <Profile /> }],
+            },
+            {
+                path: "user/library",
+                element: <PrivateRoute />,
+                children: [{ path: "", element: <MyBooks /> }],
             },
             { path: "book/:volume_id", element: <BookDetails /> },
         ],
@@ -36,5 +55,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-    return <RouterProvider router={router} />;
+    return (
+        <ErrorBoundary>
+            <RouterProvider router={router} />
+        </ErrorBoundary>
+    );
 }

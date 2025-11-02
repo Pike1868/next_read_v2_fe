@@ -54,7 +54,7 @@ export default function Search() {
     });
 
     return (
-        <div>
+        <div className="w-full max-w-7xl mx-auto">
             <SearchFilters />
             {books.length > 0 ? (
                 <>
@@ -62,9 +62,14 @@ export default function Search() {
                     <Pagination />
                 </>
             ) : (
-                <p className="m-8 text-center mb-96">
-                    No books found. Try searching for something else!
-                </p>
+                <div className="text-center py-16 md:py-24">
+                    <p className="text-base md:text-lg text-gray-600 mb-4">
+                        No books found
+                    </p>
+                    <p className="text-sm md:text-base text-gray-500">
+                        Try searching for something else!
+                    </p>
+                </div>
             )}
         </div>
     );

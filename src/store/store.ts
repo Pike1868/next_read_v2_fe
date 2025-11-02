@@ -1,6 +1,6 @@
 import authListenerMiddleware from '@/middleware/authListenerMiddleware';
 import { isTokenExpired } from '@/util/jwtHelper';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import rootReducer, { RootState } from './rootReducer';
 
 // Function to save state to local storage
@@ -52,7 +52,14 @@ const loadState = (): RootState | undefined => {
     }
 };
 
-
+export function setupStore(preloadedState?: PreloadedState<RootState>) {
+    return configureStore({
+        reducer: rootReducer,
+        preloadedState,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().prepend(authListenerMiddleware.middleware),
+    });
+}
 
 // Load the preloaded state from local storage
 const preloadedState = loadState();
@@ -71,4 +78,5 @@ store.subscribe(() => {
 });
 
 export type AppDispatch = typeof store.dispatch;
+export type AppStore = ReturnType<typeof setupStore>;
 export default store;
