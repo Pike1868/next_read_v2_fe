@@ -1,3 +1,4 @@
+import ErrorBoundary from "@/components/error/ErrorBoundary";
 import PrivateRoute from "@/components/user/PrivateRoute";
 import HomeLayout from "@/layouts/HomeLayout";
 import About from "@/pages/About";
@@ -54,5 +55,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-    return <RouterProvider router={router} />;
+    return (
+        <ErrorBoundary>
+            <RouterProvider router={router} />
+        </ErrorBoundary>
+    );
 }
