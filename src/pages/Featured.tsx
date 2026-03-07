@@ -1,6 +1,5 @@
 import ServerApi from "@/api/ServerAPI";
 import FeaturedBookCard from "@/components/books/FeaturedBookCard";
-import { Button } from "@/components/ui/button";
 import { FeaturedBook, FeaturedListsResponse } from "@/types/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +23,7 @@ export default function Featured() {
             const uniqueBooks = deduplicateBooks(resp.data.featured_lists);
             setFeaturedData({ ...resp.data, featured_lists: uniqueBooks });
         } catch (error) {
-            console.error("Error fetching featured lists:", error);
+            if (import.meta.env.DEV) console.error("Error fetching featured lists:", error);
         } finally {
             setLoading(false);
         }
@@ -64,17 +63,9 @@ export default function Featured() {
                     <h1 className="text-4xl md:text-5xl font-bold mb-2">
                         Bestseller Collections
                     </h1>
-                    <p className="text-lg md:text-xl text-green-100 mb-6">
+                    <p className="text-lg md:text-xl text-green-100">
                         Discover what's trending across different genres
                     </p>
-                    <Button
-                        onClick={fetchFeaturedLists}
-                        variant="outline"
-                        className="bg-white text-green-700 hover:bg-green-50 border-0 font-semibold"
-                        disabled={loading}
-                    >
-                        {loading ? "Loading..." : "Refresh Lists"}
-                    </Button>
                 </div>
             </div>
 
