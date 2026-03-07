@@ -10,6 +10,7 @@ import {
     QuizUserResultResponse,
     RecommendationsResponse,
     SimilarBooksResponse,
+    TrendingResponse,
     RequestMethod,
     SearchByGenreRequest,
     SearchRequest,
@@ -225,6 +226,14 @@ class ServerApi {
     public async getSimilarBooks(bookId: string, limit: number = 6): Promise<ApiResponse<SimilarBooksResponse>> {
         return this.request<{ limit: number }, SimilarBooksResponse>({
             endpoint: `api/recommendations/book/${bookId}`,
+            data: { limit },
+            method: 'get',
+        });
+    }
+
+    public async getTrendingBooks(limit: number = 20): Promise<ApiResponse<TrendingResponse>> {
+        return this.request<{ limit: number }, TrendingResponse>({
+            endpoint: 'api/recommendations/trending',
             data: { limit },
             method: 'get',
         });

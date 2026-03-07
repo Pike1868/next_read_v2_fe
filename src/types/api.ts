@@ -185,3 +185,15 @@ export interface SimilarBooksResponse {
     similar_books: RecommendationBook[];
     total: number;
 }
+
+export interface TrendingBook {
+    book: ApiBook;
+    rank: number;
+    list_name: string;
+    bestsellers_date: string | null;
+}
+
+export interface TrendingResponse {
+    trending: TrendingBook[];
+    total: number;
+}

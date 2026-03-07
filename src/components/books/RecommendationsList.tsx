@@ -3,6 +3,7 @@ import ServerApi from "@/api/ServerAPI";
 import { RecommendationBook } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import RecommendationCard from "./RecommendationCard";
+import { motion } from "framer-motion";
 
 interface RecommendationsListProps {
     limit?: number;
@@ -33,7 +34,7 @@ export default function RecommendationsList({
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : "Failed to load recommendations";
             setError(errorMessage);
-            console.error("Error fetching recommendations:", err);
+            if (import.meta.env.DEV) console.error("Error fetching recommendations:", err);
         } finally {
             setLoading(false);
         }
@@ -45,7 +46,7 @@ export default function RecommendationsList({
             await ServerApi.saveBookStatus(googleBooksId, "want_to_read");
             onBookSaved?.();
         } catch (err) {
-            console.error("Error saving book:", err);
+            if (import.meta.env.DEV) console.error("Error saving book:", err);
         } finally {
             setSavingId(null);
         }
@@ -56,8 +57,8 @@ export default function RecommendationsList({
             <div className="py-12">
                 {showTitle && (
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-gray-900">Recommended for You</h2>
-                        <p className="text-gray-600 mt-2">Books tailored to your reading preferences</p>
+                        <h2 className="text-3xl font-bold text-gray-900">Readers Like You Enjoy</h2>
+                        <p className="text-gray-600 mt-2">Finding books that match your style...</p>
                     </div>
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -74,7 +75,7 @@ export default function RecommendationsList({
             <div className="py-12">
                 {showTitle && (
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-gray-900">Recommended for You</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Readers Like You Enjoy</h2>
                     </div>
                 )}
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -92,14 +93,17 @@ export default function RecommendationsList({
             <div className="py-12">
                 {showTitle && (
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-gray-900">Recommended for You</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Readers Like You Enjoy</h2>
                     </div>
                 )}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-8 text-center">
-                    <p className="text-blue-700 mb-4">
-                        No recommendations available yet. Complete your reading profile to get personalized recommendations!
+                <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
+                    <p className="text-green-800 mb-2 font-medium">
+                        We're building your personalized picks!
                     </p>
-                    <Button className="bg-blue-600 hover:bg-blue-700">Start Adding Books</Button>
+                    <p className="text-green-700 mb-4 text-sm">
+                        Take the reading personality quiz or add books to your library to get recommendations tailored to your style.
+                    </p>
+                    <Button className="bg-green-700 hover:bg-green-800">Take the Quiz</Button>
                 </div>
             </div>
         );
@@ -108,30 +112,38 @@ export default function RecommendationsList({
     return (
         <div className="py-12">
             {showTitle && (
-                <div className="mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Recommended for You</h2>
+                <motion.div
+                    className="mb-8"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                >
+                    <h2 className="text-3xl font-bold text-gray-900">Readers Like You Enjoy</h2>
                     <p className="text-gray-600 mt-2">
-                        {recommendations.length} personalized recommendations based on your reading history
+                        {recommendations.length} picks based on your reading personality and what's trending
                     </p>
-                </div>
+                </motion.div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recommendations.map((book) => (
-                    <RecommendationCard
+                {recommendations.map((book, i) => (
+                    <motion.div
                         key={book.google_books_id}
-                        book={book}
-                        onSave={handleSaveBook}
-                        isSaving={savingId === book.google_books_id}
-                    />
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: i * 0.08 }}
+                    >
+                        <RecommendationCard
+                            book={book}
+                            onSave={handleSaveBook}
+                            isSaving={savingId === book.google_books_id}
+                        />
+                    </motion.div>
                 ))}
             </div>
 
             {recommendations.length > 0 && (
                 <div className="mt-8 text-center">
-                    <p className="text-gray-600 mb-4">
-                        Showing {recommendations.length} of your top recommendations
-                    </p>
                     <Button
                         onClick={fetchRecommendations}
                         variant="outline"
