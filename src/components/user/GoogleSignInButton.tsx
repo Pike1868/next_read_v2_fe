@@ -40,7 +40,6 @@ export default function GoogleSignInButton({
           })
         );
 
-        localStorage.setItem('jwt_token', access_token);
         ServerApi.setToken(access_token);
 
         toast({

@@ -173,7 +173,7 @@ export default function Reader() {
                 title={`Reading: ${bookTitle}`}
                 className="flex-1 w-full border-0"
                 allowFullScreen
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                sandbox="allow-scripts allow-popups allow-forms"
             />
         </div>
     );

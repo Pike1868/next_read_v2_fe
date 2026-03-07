@@ -13,6 +13,7 @@ import { RootState } from "@/store/rootReducer";
 import { AppDispatch } from "@/store/store";
 import { Book, BookDetailsResponse } from "@/types/books";
 import FreeReadButton from "@/components/books/FreeReadButton";
+import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -130,9 +131,9 @@ export default function BookDetails() {
 
                     <div
                         dangerouslySetInnerHTML={{
-                            __html: isExpanded
+                            __html: DOMPurify.sanitize(isExpanded
                                 ? book.description
-                                : book.description.slice(0, 300) + "...",
+                                : book.description.slice(0, 300) + "..."),
                         }}
                         className={`max-w-full text-gray-700 ${
                             isExpanded

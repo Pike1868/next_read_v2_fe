@@ -3,8 +3,10 @@ import FeaturedBookCard from "@/components/books/FeaturedBookCard";
 import { Button } from "@/components/ui/button";
 import { FeaturedBook, FeaturedListsResponse } from "@/types/api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Featured() {
+    const navigate = useNavigate();
     const [featuredData, setFeaturedData] =
         useState<FeaturedListsResponse | null>(null);
     const [loading, setLoading] = useState(true);
@@ -124,7 +126,7 @@ export default function Featured() {
                                             <FeaturedBookCard
                                                 book={book}
                                                 onClick={() =>
-                                                    window.location.href = `/book/${book.google_books_id}`
+                                                    navigate(`/book/${book.google_books_id}`)
                                                 }
                                             />
                                         </div>
