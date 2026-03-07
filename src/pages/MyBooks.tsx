@@ -215,7 +215,7 @@ export default function MyBooks() {
                   {book.title}
                 </h3>
                 <p className="text-xs md:text-sm text-gray-600 line-clamp-1">
-                  {book.authors.join(", ")}
+                  {Array.isArray(book.authors) ? book.authors.join(", ") : book.authors}
                 </p>
               </CardContent>
 

@@ -38,7 +38,7 @@ export default function BooksList({ books }: BooksListProps) {
                                         {book.title}
                                     </h2>
                                     <p className="text-sm md:text-base text-gray-600 mt-1 line-clamp-1">
-                                        by <span className="font-semibold">{book.authors[0]}</span>
+                                        by <span className="font-semibold">{Array.isArray(book.authors) ? book.authors[0] : book.authors}</span>
                                     </p>
                                 </div>
 

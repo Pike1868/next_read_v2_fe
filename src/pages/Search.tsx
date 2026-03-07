@@ -38,7 +38,9 @@ export default function Search() {
             case "z-a":
                 return b.title.localeCompare(a.title);
             case "author":
-                return a.authors[0].localeCompare(b.authors[0]);
+                const aAuthor = Array.isArray(a.authors) ? a.authors[0] || "" : a.authors || "";
+                const bAuthor = Array.isArray(b.authors) ? b.authors[0] || "" : b.authors || "";
+                return aAuthor.localeCompare(bAuthor);
             case "year":
                 return (
                     new Date(b.published_date).getFullYear() -
@@ -47,7 +49,7 @@ export default function Search() {
             case "page length":
                 return a.page_count - b.page_count;
             case "categories":
-                return a.categories[0].localeCompare(b.categories[0]);
+                return (a.categories[0] || "").localeCompare(b.categories[0] || "");
             default:
                 return 0;
         }

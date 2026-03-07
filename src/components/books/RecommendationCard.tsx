@@ -31,9 +31,12 @@ export default function RecommendationCard({
             {/* Book Cover */}
             <div className="relative w-full bg-gray-100 h-64 overflow-hidden group">
                 <img
-                    src={book.thumbnail_url}
+                    src={book.thumbnail_url || "/bookcover-na.jpg"}
                     alt={book.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/bookcover-na.jpg";
+                    }}
                 />
                 {/* Recommendation Score Badge */}
                 <div className="absolute top-2 right-2 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
@@ -48,7 +51,7 @@ export default function RecommendationCard({
                     {book.title}
                 </h3>
                 <p className="text-sm text-gray-600 mb-3 line-clamp-1">
-                    by {book.authors?.join(", ") || "Unknown"}
+                    by {Array.isArray(book.authors) ? book.authors.join(", ") : book.authors || "Unknown"}
                 </p>
 
                 {/* Rating */}

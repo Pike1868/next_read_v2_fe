@@ -43,7 +43,7 @@ export default function BooksGrid({ books }: BooksGridProps) {
                                     {book.title}
                                 </h2>
                                 <p className="text-xs md:text-sm text-gray-600 line-clamp-1">
-                                    <span className="font-medium">by:</span> {book.authors.join(", ")}
+                                    <span className="font-medium">by:</span> {Array.isArray(book.authors) ? book.authors.join(", ") : book.authors}
                                 </p>
                                 <div className="space-y-1 text-xs md:text-sm text-gray-500 border-t pt-2">
                                     {book.published_date && (

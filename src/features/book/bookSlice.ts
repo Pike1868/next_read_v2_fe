@@ -11,7 +11,7 @@ const toBook = (apiBook: ApiBook, status: BookStatus): Book & { status: BookStat
   return {
     google_books_id: apiBook.google_books_id,
     title: apiBook.title || "Unknown Title",
-    authors: apiBook.authors || ["Unknown Author"],
+    authors: Array.isArray(apiBook.authors) ? apiBook.authors : (typeof apiBook.authors === "string" ? apiBook.authors.split(", ") : ["Unknown Author"]),
     thumbnail_url: apiBook.thumbnail_url || "/bookcover-na.jpg",
     published_date: apiBook.published_date || "",
     page_count: apiBook.page_count || 0,

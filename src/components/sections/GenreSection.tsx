@@ -61,9 +61,9 @@ export default function GenresSection() {
             dispatch(setSearchResults(results.data.books));
 
             // Navigate to the search page to display results
-            navigate("book/search");
+            navigate("/book/search");
         } catch (error) {
-            console.error("Error searching books by genre:", error);
+            if (import.meta.env.DEV) console.error("Error searching books by genre:", error);
         }
     };
 

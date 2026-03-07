@@ -44,7 +44,7 @@ export default function BookDetails() {
             const book: Book = {
                 google_books_id: volumeId,
                 title: bookData.title || "Unknown Title",
-                authors: bookData.authors || ["Unknown Author"],
+                authors: Array.isArray(bookData.authors) ? bookData.authors : (typeof bookData.authors === "string" ? bookData.authors.split(", ") : ["Unknown Author"]),
                 thumbnail_url: bookData.imageLinks?.thumbnail || DEFAULT_IMAGE,
                 published_date: bookData.publishedDate || "",
                 page_count: bookData.pageCount || 0,
@@ -159,7 +159,7 @@ export default function BookDetails() {
                             </Button>
                         </div>
                         <p className="mt-2 text-sm text-gray-600">
-                            Authors: {book.authors.join(", ")}
+                            Authors: {Array.isArray(book.authors) ? book.authors.join(", ") : book.authors}
                         </p>
                         <p className="text-sm text-gray-600">
                             Publisher: {book.publisher}

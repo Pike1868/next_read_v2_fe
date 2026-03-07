@@ -29,10 +29,11 @@ const Modal: React.FC<ModalProps> = ({
                             {title}
                         </h3>
                         <button
-                            className="float-right p-1 ml-auto text-2xl font-semibold leading-none text-black bg-transparent border-0 outline-none opacity-5 focus:outline-none"
+                            className="float-right p-1 ml-auto text-2xl font-semibold leading-none text-gray-600 bg-transparent border-0 outline-none hover:text-gray-900 opacity-70 hover:opacity-100 focus:outline-none transition-opacity"
                             onClick={onClose}
+                            aria-label="Close"
                         >
-                            <span className="block w-6 h-6 text-2xl text-black bg-transparent outline-none opacity-5 focus:outline-none">
+                            <span className="block w-6 h-6 text-2xl">
                                 ×
                             </span>
                         </button>
