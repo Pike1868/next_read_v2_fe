@@ -77,11 +77,11 @@ class ServerApi {
 
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
-                console.error("API Error:", err.response || err);
+                if (import.meta.env.DEV) console.error("API Error:", err.response?.status, err.response?.data?.msg);
                 const message = err.response?.data?.msg || 'An error occurred';
                 throw new Error(message);
             } else {
-                console.error("Unexpected error:", err);
+                if (import.meta.env.DEV) console.error("Unexpected error:", err);
                 throw new Error('An unexpected error occurred');
             }
         }

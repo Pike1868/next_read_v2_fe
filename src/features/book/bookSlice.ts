@@ -37,7 +37,7 @@ export const fetchUserBooks = createAsyncThunk(
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("Failed to fetch user books:", error.message);
+        if (import.meta.env.DEV) console.error("Failed to fetch user books:", error.message);
         return rejectWithValue(error.message);
       }
       return rejectWithValue("An unknown error occurred while fetching user books");
@@ -56,10 +56,10 @@ export const removeBookFromServer = createAsyncThunk(
       return { google_books_id }; // Return ID of the removed book
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("Failed to remove book:", error.message);
+        if (import.meta.env.DEV) console.error("Failed to remove book:", error.message);
         return rejectWithValue(error.message);
       } else {
-        console.error("Unknown error removing book:", error);
+        if (import.meta.env.DEV) console.error("Unknown error removing book:", error);
         return rejectWithValue("An unknown error occurred");
       }
     }
@@ -86,7 +86,7 @@ export const saveBookToServer = createAsyncThunk(
       return { google_books_id, status };
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("Failed to save book status:", error.message);
+        if (import.meta.env.DEV) console.error("Failed to save book status:", error.message);
         return rejectWithValue(error.message);
       }
       return rejectWithValue("An unknown error occurred while saving the book");
@@ -198,7 +198,7 @@ const bookSlice = createSlice({
     });
 
     builder.addCase(fetchUserBooks.rejected, (state, action) => {
-      console.error("Failed to fetch user books:", action.payload);
+      if (import.meta.env.DEV) console.error("Failed to fetch user books:", action.payload);
     });
 
     // Remove Book
@@ -213,7 +213,7 @@ const bookSlice = createSlice({
     });
 
     builder.addCase(removeBookFromServer.rejected, (state, action) => {
-      console.error("Failed to remove book:", action.payload);
+      if (import.meta.env.DEV) console.error("Failed to remove book:", action.payload);
     });
 
     // Save Book
@@ -257,7 +257,7 @@ const bookSlice = createSlice({
     });
 
     builder.addCase(saveBookToServer.rejected, (state, action) => {
-      console.error("Failed to save book status:", action.payload);
+      if (import.meta.env.DEV) console.error("Failed to save book status:", action.payload);
     });
   },
 });

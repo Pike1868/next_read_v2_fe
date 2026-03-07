@@ -9,7 +9,7 @@ const saveState = (state: RootState) => {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('state', serializedState);
     } catch (error) {
-        console.error('Could not save state', error);
+        if (import.meta.env.DEV) console.error('Could not save state', error);
     }
 };
 
@@ -47,7 +47,7 @@ const loadState = (): RootState | undefined => {
 
         return loadedState;
     } catch (error) {
-        console.error('Could not load state', error);
+        if (import.meta.env.DEV) console.error('Could not load state', error);
         return undefined;
     }
 };
