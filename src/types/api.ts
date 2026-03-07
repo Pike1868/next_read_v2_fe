@@ -1,6 +1,6 @@
 import { Book, BookDetailsResponse } from "./books";
 
-export type RequestMethod = "get" | "post" | "put" | "delete";
+export type RequestMethod = "get" | "post" | "put" | "delete" | "patch";
 
 export type ApiResponse<T> = {
     data: T;

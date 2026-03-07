@@ -62,7 +62,7 @@ export default function Header({ onOpenSavedBooks }: HeaderProps) {
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            handleSearch(e as any);
+            handleSearch(e as React.FormEvent);
         }
     };
 

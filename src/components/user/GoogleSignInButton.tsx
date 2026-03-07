@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUser } from '@/features/user/userSlice';
+import { loginUser } from '@/features/user/userSlice';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import ServerApi from '@/api/ServerAPI';
@@ -27,17 +27,15 @@ export default function GoogleSignInButton({
     onSuccess: async (codeResponse) => {
       setIsLoading(true);
       try {
-        const response = await ServerApi.request({
-          url: '/users/google-signin',
-          method: 'post',
-          data: { token: codeResponse.access_token },
+        const response = await ServerApi.googleSignIn({
+          token: codeResponse.access_token,
         });
 
         const { user, access_token } = response.data;
 
         dispatch(
-          setUser({
-            ...user,
+          loginUser({
+            username: user.username,
             token: access_token,
           })
         );

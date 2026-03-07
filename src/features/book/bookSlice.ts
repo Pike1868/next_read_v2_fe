@@ -219,8 +219,6 @@ const bookSlice = createSlice({
     // Save Book
     builder.addCase(saveBookToServer.fulfilled, (state, action) => {
       const { google_books_id, status } = action.payload;
-      console.log("saveBookToServer.fulfilled called with:", action.payload);
-console.log("saveBookToServer.fulfilled called with:", action.payload);
       // Check if the book exists in any category
       let bookFound = false;
 

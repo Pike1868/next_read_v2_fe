@@ -9,8 +9,10 @@ import Featured from "@/pages/Featured";
 import HomePage from "@/pages/Home";
 import MyBooks from "@/pages/MyBooks";
 import Profile from "@/pages/Profile";
+import PublicProfile from "@/pages/PublicProfile";
 import Quiz from "@/pages/Quiz";
 import QuizResults from "@/pages/QuizResults";
+import Reader from "@/pages/Reader";
 import Search from "@/pages/Search";
 import Signin from "@/pages/Signin";
 import Signup from "@/pages/Signup";
@@ -50,6 +52,8 @@ const router = createBrowserRouter([
                 children: [{ path: "", element: <MyBooks /> }],
             },
             { path: "book/:volume_id", element: <BookDetails /> },
+            { path: "read/:identifier", element: <Reader /> },
+            { path: "user/:username", element: <PublicProfile /> },
         ],
     },
 ]);

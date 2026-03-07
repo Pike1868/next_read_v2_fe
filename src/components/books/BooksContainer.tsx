@@ -3,7 +3,6 @@ import BooksList from "@/components/books/BooksList";
 import { Button } from "@/components/ui/button";
 import { Book } from "@/types/books";
 import { useState } from "react";
-import { FaTh as FaGrid, FaList } from "react-icons/fa";
 import { LayoutGrid, List } from "lucide-react";
 
 interface BooksContainerProps {

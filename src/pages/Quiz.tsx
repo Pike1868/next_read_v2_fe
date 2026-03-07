@@ -24,7 +24,7 @@ export default function Quiz() {
 
     useEffect(() => {
         if (!user) {
-            navigate("/signin");
+            navigate("/user/sign-in");
             return;
         }
         fetchQuestions();

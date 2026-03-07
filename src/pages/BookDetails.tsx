@@ -12,15 +12,13 @@ import { clearBookDetails, setBookDetails, saveBookToServer, fetchUserBooks } fr
 import { RootState } from "@/store/rootReducer";
 import { AppDispatch } from "@/store/store";
 import { Book, BookDetailsResponse } from "@/types/books";
+import FreeReadButton from "@/components/books/FreeReadButton";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { BookStatuses } from "@/constants/bookStatuses"; // Import status constants
 
 const DEFAULT_IMAGE = "/bookcover-na.jpg";
-
-console.log("saveBookToServer:", saveBookToServer); // Should log a function
-
 
 export default function BookDetails() {
     const user = useSelector((state: RootState) => state.user.user); // Get the user from Redux state
@@ -91,7 +89,6 @@ export default function BookDetails() {
                     console.error("Unknown status:", status);
                     return;
             }
-            console.log("Mapped Status:", mappedStatus); // Verify mapping
             // Dispatch the thunk with the mapped status
             await dispatch(saveBookToServer({
                 google_books_id: book.google_books_id,
@@ -100,8 +97,6 @@ export default function BookDetails() {
             
             // Refetch user books to sync library with latest changes
             await dispatch(fetchUserBooks());
-
-            console.log("Dispatched saveBookToServer");// Confirm dispatch
 
             toast({
                 description: `Book status saved as: ${status}`,
@@ -163,6 +158,12 @@ export default function BookDetails() {
                     <p className="text-sm text-gray-600">
                         Published Date: {book.published_date}
                     </p>
+                    <div className="mt-4">
+                        <FreeReadButton
+                            googleBooksId={book.google_books_id}
+                            bookTitle={book.title}
+                        />
+                    </div>
                 </div>
             </CardContent>
 

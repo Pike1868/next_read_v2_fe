@@ -19,18 +19,7 @@ export default function Featured() {
         setLoading(true);
         try {
             const resp = await ServerApi.getFeaturedLists();
-            console.log("API Response:", resp.data);
-
-            // Log the image URLs for debugging
-            resp.data.featured_lists.forEach((list) => {
-                list.books.forEach((book) => {
-                    console.log("Book Image:", book.book_image);
-                    console.log("Google Thumbnail:", book.google_thumbnail_url);
-                });
-            });
-
             const uniqueBooks = deduplicateBooks(resp.data.featured_lists);
-            console.log(uniqueBooks);
             setFeaturedData({ ...resp.data, featured_lists: uniqueBooks });
         } catch (error) {
             console.error("Error fetching featured lists:", error);
@@ -135,10 +124,7 @@ export default function Featured() {
                                             <FeaturedBookCard
                                                 book={book}
                                                 onClick={() =>
-                                                    console.log(
-                                                        "Book card clicked:",
-                                                        book
-                                                    )
+                                                    window.location.href = `/book/${book.google_books_id}`
                                                 }
                                             />
                                         </div>

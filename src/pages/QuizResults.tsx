@@ -37,7 +37,7 @@ export default function QuizResults() {
 
     useEffect(() => {
         if (!user) {
-            navigate("/signin");
+            navigate("/user/sign-in");
             return;
         }
         fetchResult();

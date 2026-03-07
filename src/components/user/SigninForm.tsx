@@ -50,11 +50,7 @@ export default function SigninForm() {
 
             // Fetch and store user's saved books
             const savedBooksResponse = await ServerApi.getUserBooks();
-            console.log(
-                "===================================",
-                savedBooksResponse
-            );
-            dispatch(setSavedBooks(savedBooksResponse.data)); // Dispatch the action to set saved books
+            dispatch(setSavedBooks(savedBooksResponse.data));
 
             navigate("/");
         } catch (error) {

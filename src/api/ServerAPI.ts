@@ -62,8 +62,6 @@ class ServerApi {
         data?: T;
         method?: RequestMethod;
     }): Promise<ApiResponse<R>> { // Return type is a Promise that resolves to ApiResponse<R>
-        console.log("API Call:", endpoint, data, method, this.token);
-
         const url = `${BASE_URL}/${endpoint}`;
         const headers = this.token ? { Authorization: `Bearer ${this.token}` } : {};
         const params = method === "get" ? data : {};
@@ -72,7 +70,6 @@ class ServerApi {
             const response: AxiosResponse<R> = await axios({ url, method, data, params, headers });
             // Wrap the response to conform to custom ApiResponse type
 
-            console.log("+++++++++++", response)
             return {
                 data: response.data,
                 status: response.status,
@@ -175,7 +172,6 @@ class ServerApi {
             method: "get",
         });
 
-        console.log("Fetched User Books Response:", response);
         return response;
     }
 
@@ -238,6 +234,86 @@ class ServerApi {
         return this.request<Record<string, never>, { message: string; total: number }>({
             endpoint: 'api/recommendations/regenerate',
             method: 'post',
+        });
+    }
+
+    // Google OAuth sign-in
+    public async googleSignIn(data: { token: string }): Promise<ApiResponse<SigninResponse>> {
+        return this.request<{ token: string }, SigninResponse>({
+            endpoint: 'api/users/google-signin',
+            data,
+            method: 'post',
+        });
+    }
+
+    // Reading progress
+    public async updateReadingProgress(volumeId: string, currentPage: number): Promise<ApiResponse<{ msg: string; current_page: number; status: string; start_date: string | null; end_date: string | null; page_count: number | null }>> {
+        return this.request<{ current_page: number }, { msg: string; current_page: number; status: string; start_date: string | null; end_date: string | null; page_count: number | null }>({
+            endpoint: `api/books/${volumeId}/progress`,
+            data: { current_page: currentPage },
+            method: 'patch',
+        });
+    }
+
+    public async getReadingProgress(volumeId: string): Promise<ApiResponse<{ current_page: number; page_count: number | null; status: string; start_date: string | null; end_date: string | null }>> {
+        return this.request<Record<string, never>, { current_page: number; page_count: number | null; status: string; start_date: string | null; end_date: string | null }>({
+            endpoint: `api/books/${volumeId}/progress`,
+            method: 'get',
+        });
+    }
+
+    // Public profiles
+    public async getPublicProfile(username: string): Promise<ApiResponse<{ is_public: boolean; username?: string; bio?: string; image_url?: string; top_books?: Record<string, unknown>[]; book_lists?: Record<string, Record<string, unknown>[]>; msg?: string }>> {
+        return this.request<Record<string, never>, { is_public: boolean; username?: string; bio?: string; image_url?: string; top_books?: Record<string, unknown>[]; book_lists?: Record<string, Record<string, unknown>[]>; msg?: string }>({
+            endpoint: `api/users/public/${username}`,
+            method: 'get',
+        });
+    }
+
+    public async updateProfileVisibility(settings: { is_public?: boolean; show_currently_reading?: boolean; show_want_to_read?: boolean; show_previously_read?: boolean }): Promise<ApiResponse<{ msg: string }>> {
+        return this.request<typeof settings, { msg: string }>({
+            endpoint: 'api/users/profile/visibility',
+            data: settings,
+            method: 'post',
+        });
+    }
+
+    public async setTopBooks(bookIds: string[]): Promise<ApiResponse<{ msg: string }>> {
+        return this.request<{ book_ids: string[] }, { msg: string }>({
+            endpoint: 'api/users/profile/top-books',
+            data: { book_ids: bookIds },
+            method: 'post',
+        });
+    }
+
+    // Free Reader API Methods
+    public async checkFreeBook(googleBooksId: string): Promise<ApiResponse<{ available: boolean; reader_url: string | null; source: string | null; ia_id: string | null }>> {
+        return this.request<Record<string, never>, { available: boolean; reader_url: string | null; source: string | null; ia_id: string | null }>({
+            endpoint: `api/reader/check/${googleBooksId}`,
+            method: 'get',
+        });
+    }
+
+    public async searchFreeBooks(query: string): Promise<ApiResponse<{ books: Record<string, unknown>[]; query: string; total: number }>> {
+        return this.request<{ query: string }, { books: Record<string, unknown>[]; query: string; total: number }>({
+            endpoint: 'api/reader/search',
+            data: { query },
+            method: 'get',
+        });
+    }
+
+    public async saveReaderPosition(googleBooksId: string, currentPage: number, totalPages: number): Promise<ApiResponse<{ msg: string; current_page: number; google_books_id: string }>> {
+        return this.request<{ google_books_id: string; current_page: number; total_pages: number }, { msg: string; current_page: number; google_books_id: string }>({
+            endpoint: 'api/reader/position',
+            data: { google_books_id: googleBooksId, current_page: currentPage, total_pages: totalPages },
+            method: 'post',
+        });
+    }
+
+    public async getReaderPosition(googleBooksId: string): Promise<ApiResponse<{ current_page: number; total_pages: number | null; google_books_id: string; status?: string }>> {
+        return this.request<Record<string, never>, { current_page: number; total_pages: number | null; google_books_id: string; status?: string }>({
+            endpoint: `api/reader/position/${googleBooksId}`,
+            method: 'get',
         });
     }
 
