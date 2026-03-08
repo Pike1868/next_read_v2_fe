@@ -13,8 +13,8 @@ export default function Pagination() {
     const books = useSelector((state: RootState) => state.search.results);
     const [isLoading, setIsLoading] = useState(false);
 
-    const currentPage = Math.floor(startIndex / 40) + 1;
-    const BOOKS_PER_PAGE = 40;
+    const currentPage = Math.floor(startIndex / 5) + 1;
+    const BOOKS_PER_PAGE = 5;
     const hasMoreBooks = books.length === BOOKS_PER_PAGE;
 
     const handlePageChange = async (newIndex: number) => {
@@ -34,13 +34,13 @@ export default function Pagination() {
 
     const handlePreviousPage = () => {
         if (startIndex > 0) {
-            handlePageChange(startIndex - 40);
+            handlePageChange(startIndex - 5);
         }
     };
 
     const handleNextPage = () => {
         if (hasMoreBooks) {
-            handlePageChange(startIndex + 40);
+            handlePageChange(startIndex + 5);
         }
     };
 
@@ -71,7 +71,7 @@ export default function Pagination() {
                 {getPageNumbers().map((pageNum) => (
                     <Button
                         key={pageNum}
-                        onClick={() => handlePageChange((pageNum - 1) * 40)}
+                        onClick={() => handlePageChange((pageNum - 1) * 5)}
                         disabled={isLoading}
                         variant={pageNum === currentPage ? "default" : "outline"}
                         className={`w-10 h-10 p-0 transition-all ${
